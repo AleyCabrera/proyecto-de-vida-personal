@@ -1,11 +1,227 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Aley Cabrera | Proyecto de Vida</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!--Link CSS-->
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <!--Scripts-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="/js/main.js" defer></script>
 </head>
+
 <body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-dragon"></i>
+                <span>Aley Cabrera</span>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-page="home"><i class="fas fa-home"></i> Inicio</button>
+                <button class="nav-btn" data-page="schedule"><i class="fas fa-calendar"></i> Horario 24h</button>
+                <button class="nav-btn" data-page="priorities"><i class="fas fa-chart-line"></i> Prioridades</button>
+                <button class="nav-btn" data-page="projects"><i class="fas fa-microchip"></i> Proyectos</button>
+                <button class="nav-btn" data-page="certifications"><i class="fas fa-certificate"></i>
+                    Certificaciones</button>
+                <button class="nav-btn" data-page="studyplan"><i class="fas fa-graduation-cap"></i> Plan
+                    Estudio</button>
+                <button class="nav-btn" data-page="cv"><i class="fas fa-user"></i> CV & Habilidades</button>
+            </div>
+        </div>
+    </nav>
     
+    <main class="page-container">
+        <!-- Home Page -->
+        <section id="home-page" class="page active-page">
+            <article class="hero-landing">
+                <h1>Mi <span class="highlight">Proyecto de Vida</span></h1>
+                <p style="font-size: 1.2rem; margin: 20px 0;">Arquitectura de Ciberseguridad | IoT | Automatización
+                    Industrial 4.0</p>
+                <div style="margin: 24px 0;">
+                    <i class="fas fa-quote-left" style="color:#dc2626;"></i>
+                    <em style="font-size: 1.1rem;">"El éxito no es la clave de la felicidad. La felicidad es la clave
+                        del éxito. Si amas lo que haces, tendrás éxito"</em>
+                    <i class="fas fa-quote-right" style="color:#dc2626;"></i>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number-large" id="landing-projects">0</div>
+                        <div>Proyectos Activos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number-large" id="landing-certs">0</div>
+                        <div>Certificaciones</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number-large" id="landing-hours">24/7</div>
+                        <div>Horario Control</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number-large" id="landing-goals">6</div>
+                        <div>Metas Estratégicas</div>
+                    </div>
+                </div>
+                <button class="btn-primary" style="margin-top: 32px;"
+                    onclick="document.querySelector('[data-page=\'schedule\']').click()">
+                    <i class="fas fa-play"></i> Comenzar seguimiento
+                </button>
+            </article>
+            <article class="card">
+                <div class="card-title"><i class="fas fa-bullseye"></i> Mis Metas 2025-2032</div>
+                <div id="goals-timeline"></div>
+            </article>
+        </section>
+
+        <!-- Horario 24h con Modal y resaltado de hora actual -->
+        <section id="schedule-page" class="page">
+            <article class="card">
+                <div class="card-title"><i class="fas fa-clock"></i> Horario Semanal 24h</div>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                    <div class="live-clock" id="currentDateTimeDisplay">
+                        <i class="fas fa-calendar-day"></i> Cargando...
+                    </div>
+                    <div class="legend-badge">
+                        <div class="red-dot"></div>
+                        <span>Momento actual (hora Colombia)</span>
+                    </div>
+                </div>
+                <div class="schedule-wrapper">
+                    <table class="schedule-table" id="schedule-table">
+                        <thead id="schedule-head"></thead>
+                        <tbody id="schedule-body"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn-primary" id="save-schedule-btn"><i class="fas fa-save"></i> Guardar
+                        Horario</button>
+                    <button class="btn-danger" id="clear-schedule-btn"><i class="fas fa-trash"></i> Limpiar
+                        Todo</button>
+                    <button class="btn-secondary" id="reset-schedule-btn"><i class="fas fa-undo"></i> Restaurar
+                        Default</button>
+                </div>
+                <p style="margin-top: 14px; font-size: 0.7rem; opacity: 0.7;">
+                    <i class="fas fa-mouse-pointer"></i> Click en cualquier celda para editar con panel moderno | La
+                    celda en rojo brillante indica la hora actual
+                </p>
+            </article>
+        </section>
+
+        <!-- Prioridades -->
+        <section id="priorities-page" class="page">
+            <article class="card">
+                <div class="card-title"><i class="fas fa-chart-simple"></i> Prioridades Diarias</div>
+                <canvas id="priorities-chart" style="max-height: 300px; width: 100%;"></canvas>
+                <button class="btn-primary" style="margin-top:20px;" id="add-priority-btn">
+                    <i class="fas fa-plus"></i> Agregar Prioridad
+                </button>
+            </article>
+        </section>
+
+        <!-- Proyectos -->
+        <section id="projects-page" class="page">
+            <article class="card">
+                <div class="card-title"><i class="fas fa-microchip"></i> Proyectos Estratégicos</div>
+                <div id="projects-list" class="tracking-list"></div>
+                <button class="btn-primary" style="margin-top:20px;" id="add-project-btn">
+                    <i class="fas fa-plus"></i> Nuevo Proyecto
+                </button>
+            </article>
+        </section>
+
+        <!-- Certificaciones -->
+        <section id="certifications-page" class="page">
+            <article class="card">
+                <div class="card-title"><i class="fas fa-certificate"></i> Certificaciones - Seguimiento</div>
+                <div id="certifications-list" class="tracking-list"></div>
+                <button class="btn-primary" style="margin-top:20px;" id="add-cert-btn">
+                    <i class="fas fa-plus"></i> Agregar Certificación
+                </button>
+            </article>
+        </section>
+
+        <!-- Plan de Estudio -->
+        <section id="studyplan-page" class="page">
+            <article class="card">
+                <div class="card-title"><i class="fas fa-graduation-cap"></i> Plan de Estudio</div>
+                <div id="studyplan-list" class="tracking-list"></div>
+                <button class="btn-primary" style="margin-top:20px;" id="add-studyplan-btn">
+                    <i class="fas fa-plus"></i> Agregar Curso
+                </button>
+            </article>
+        </section>
+
+        <!-- CV y Habilidades -->
+        <section id="cv-page" class="page">
+            <article class="card">
+                <div class="card-title"><i class="fas fa-user"></i> CV & Habilidades</div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px;">
+                    <div>
+                        <h3 style="color: #dc2626; margin-bottom: 16px;"><i class="fas fa-brain"></i> Habilidades</h3>
+                        <div id="skills-list" class="tracking-list"></div>
+                        <button class="btn-secondary" style="margin-top:12px;" id="add-skill-btn">
+                            <i class="fas fa-plus"></i> Agregar Habilidad
+                        </button>
+                    </div>
+                    <div>
+                        <h3 style="color: #dc2626; margin-bottom: 16px;"><i class="fas fa-tools"></i> Herramientas</h3>
+                        <div id="tools-list" class="tracking-list"></div>
+                        <button class="btn-secondary" style="margin-top:12px;" id="add-tool-btn">
+                            <i class="fas fa-plus"></i> Agregar Herramienta
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+    
+    <!-- Modal para edición de actividades -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-plus"></i> Editar actividad</h3>
+                <button class="modal-close" id="closeModalBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="info-badge">
+                    <div><i class="fas fa-calendar-day"></i> Día: <span id="modalDay">Lunes</span></div>
+                    <div><i class="fas fa-clock"></i> Hora: <span id="modalHour">00:00</span></div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Actividad / Tarea</label>
+                    <input type="text" id="activityName" placeholder="Ej: Clase de inglés, Reunión, Estudio..."
+                        autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-palette"></i> Tipo de actividad</label>
+                    <div class="type-selector" id="typeSelector">
+                        <div class="type-option" data-type="work">💼 Trabajo</div>
+                        <div class="type-option" data-type="class">📚 Estudio</div>
+                        <div class="type-option" data-type="personal">🌟 Personal</div>
+                        <div class="type-option" data-type="rest">😴 Descanso</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-align-left"></i> Notas (opcional)</label>
+                    <textarea id="activityDesc" placeholder="Detalles, enlace, materiales..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-delete-cell" id="deleteCellBtn"><i class="fas fa-trash"></i> Eliminar</button>
+                <button class="btn-cancel" id="cancelModalBtn">Cancelar</button>
+                <button class="btn-save-modal" id="saveModalBtn"><i class="fas fa-check"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
