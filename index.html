@@ -12,10 +12,12 @@
 
     <!--Link CSS-->
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/goal.css">
 
     <!--Scripts-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="/js/main.js" defer></script>
+    <script src="/js/goal.js" defer></script>
 </head>
 
 <body>
@@ -93,12 +95,108 @@
             </div>
         </section>
 
-        <Section id="goals-page" class="page">
+        <section id="goals-page" class="page">
             <article class="card">
-                <div class="card-title"><i class="fas fa-bullseye"></i> Mis Metas 2025-2032</div>
-                <div id="goals-timeline"></div>
+                <div class="card-title">
+                    <i class="fas fa-bullseye"></i>
+                    Mis Metas Estratégicas
+                </div>
+        
+                <div class="goals-management">
+                    <!-- Formulario para agregar nueva meta -->
+                    <div class="goals-form-container">
+                        <div class="goals-form-title">
+                            <i class="fas fa-plus-circle"></i>
+                            Nueva Meta
+                        </div>
+                        <form id="newGoalForm" class="goals-form">
+                            <div class="goals-form-row">
+                                <input type="text" id="goalTitle" placeholder="Título de la meta *" required>
+                                <select id="goalYear" required>
+                                    <option value="">Año objetivo</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                    <option value="2031">2031</option>
+                                    <option value="2032">2032</option>
+                                    <option value="2033+">2033+</option>
+                                </select>
+                            </div>
+                            <textarea id="goalDescription" placeholder="Descripción o pasos a seguir..."></textarea>
+                            <button type="submit" class="btn-primary" style="align-self: flex-start;">
+                                <i class="fas fa-save"></i> Agregar Meta
+                            </button>
+                        </form>
+                    </div>
+        
+                    <!-- Metas Activas -->
+                    <div>
+                        <h3 style="color: #dc2626; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-flag-checkered"></i> Metas en curso
+                        </h3>
+                        <div id="activeGoalsList" class="goals-active-list">
+                            <!-- Se llena con JS -->
+                        </div>
+                    </div>
+        
+                    <!-- Metas Completadas (Historial) -->
+                    <div class="completed-section">
+                        <div class="completed-title">
+                            <i class="fas fa-trophy"></i>
+                            Logros Alcanzados
+                            <span id="completedCount" class="completed-stats" style="font-size: 0.8rem;">0</span>
+                        </div>
+                        <div id="completedGoalsList" class="completed-list">
+                            <!-- Se llena con JS -->
+                        </div>
+                        <button id="clearHistoryBtn" class="btn-clear-history">
+                            <i class="fas fa-trash-alt"></i> Limpiar historial
+                        </button>
+                    </div>
+                </div>
             </article>
-        </Section>
+        </section>
+        
+        <!-- Modal para editar meta -->
+        <div id="editGoalModal" class="modal-overlay goal-edit-modal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3><i class="fas fa-edit"></i> Editar Meta</h3>
+                    <button class="modal-close" onclick="closeEditModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" id="editGoalTitle" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Año</label>
+                        <select id="editGoalYear" class="form-control">
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                            <option value="2031">2031</option>
+                            <option value="2032">2032</option>
+                            <option value="2033+">2033+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea id="editGoalDescription" rows="3" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+                    <button class="btn-save-modal" id="saveEditBtn">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Horario 24h con Modal y resaltado de hora actual -->
         <section id="schedule-page" class="page">
