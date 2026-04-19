@@ -22,11 +22,12 @@
     <nav class="main-nav">
         <div class="nav-container">
             <div class="logo">
-                <i class="fas fa-dragon"></i>
+                <i class="fa-brands fa-phoenix-squadron"></i>
                 <span>Aley Cabrera</span>
             </div>
             <div class="nav-links">
                 <button class="nav-btn active" data-page="home"><i class="fas fa-home"></i> Inicio</button>
+                <button class="nav-btn" data-page="goals"><i class="fas fa-bullseye"></i> Metas</button>
                 <button class="nav-btn" data-page="schedule"><i class="fas fa-calendar"></i> Horario 24h</button>
                 <button class="nav-btn" data-page="priorities"><i class="fas fa-chart-line"></i> Prioridades</button>
                 <button class="nav-btn" data-page="projects"><i class="fas fa-microchip"></i> Proyectos</button>
@@ -44,8 +45,7 @@
         <section id="home-page" class="page active-page">
             <article class="hero-landing">
                 <h1>Mi <span class="highlight">Proyecto de Vida</span></h1>
-                <p style="font-size: 1.2rem; margin: 20px 0;">Arquitectura de Ciberseguridad | IoT | Automatización
-                    Industrial 4.0</p>
+                <p style="font-size: 1.2rem; margin: 20px 0;">Especialista en Arquitectura de Ciberseguridad para Infraestructura Cloud, IT, OT, IoT, IIoT y Sistemas Industriales.</p>
                 <div style="margin: 24px 0;">
                     <i class="fas fa-quote-left" style="color:#dc2626;"></i>
                     <em style="font-size: 1.1rem;">"El éxito no es la clave de la felicidad. La felicidad es la clave
@@ -75,11 +75,30 @@
                     <i class="fas fa-play"></i> Comenzar seguimiento
                 </button>
             </article>
+            <!-- Contenedor del Video Motivacional -->
+            <div class="video-motivational" id="motivationalVideoContainer">
+                <img class="video-thumbnail" id="videoThumbnail" src="https://img.youtube.com/vi/aJvOPtYUj1o/maxresdefault.jpg"
+                    alt="Vista previa del video: Jordi Sierra i Fabra">
+                <div class="play-button" id="playButton">
+                    <i class="fas fa-play"></i>
+                </div>
+            </div>
+            
+            <!-- Cita destacada -->
+            <div class="motivational-quote">
+                <i class="fas fa-quote-left"></i>
+                Leer me salvó la vida, escribir le dio un sentido
+                <i class="fas fa-quote-right"></i>
+                <div style="font-size: 0.8rem; margin-top: 8px;">— Jordi Sierra i Fabra, escritor</div>
+            </div>
+        </section>
+
+        <Section id="goals-page" class="page">
             <article class="card">
                 <div class="card-title"><i class="fas fa-bullseye"></i> Mis Metas 2025-2032</div>
                 <div id="goals-timeline"></div>
             </article>
-        </section>
+        </Section>
 
         <!-- Horario 24h con Modal y resaltado de hora actual -->
         <section id="schedule-page" class="page">

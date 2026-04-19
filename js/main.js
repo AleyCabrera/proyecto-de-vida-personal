@@ -1,3 +1,43 @@
+document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('motivationalVideoContainer');
+        const thumbnail = document.getElementById('videoThumbnail');
+        const playBtn = document.getElementById('playButton');
+
+        // Función para reemplazar la imagen por el iframe de YouTube
+        function loadVideo() {
+            // Evita cargar el video múltiples veces
+            if (container.querySelector('iframe')) return;
+
+            // Crea el iframe de YouTube con parámetros para mejor experiencia
+            const iframe = document.createElement('iframe');
+            // Parámetros: autoplay=1 para que inicie al hacer clic, y otros para limpieza
+            iframe.setAttribute('src', 'https://www.youtube.com/embed/aJvOPtYUj1o?autoplay=1&rel=0&modestbranding=1');
+            iframe.setAttribute('title', 'Jordi Sierra i Fabra - Leer me salvó la vida');
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+            iframe.setAttribute('allowfullscreen', true);
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            
+            // Ocultar la miniatura y el botón, y añadir el iframe
+            thumbnail.style.opacity = '0';
+            playBtn.style.opacity = '0';
+            
+            setTimeout(() => {
+                thumbnail.style.display = 'none';
+                playBtn.style.display = 'none';
+                container.appendChild(iframe);
+            }, 300);
+        }
+
+        // Escuchar clics en el contenedor o en el botón
+        container.addEventListener('click', loadVideo);
+    });
+
+
 // ========== CONFIGURACIÓN HORARIO 24h ==========
         const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
         const hours = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
