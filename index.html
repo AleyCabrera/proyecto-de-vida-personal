@@ -11,16 +11,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!--Link CSS-->
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/goal.css">
-    <link rel="stylesheet" href="/css/schedule.css">
-    <link rel="stylesheet" href="/css/priorities.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/goal.css">
+    <link rel="stylesheet" href="./css/schedule.css">
+    <link rel="stylesheet" href="./css/priorities.css">
+    <link rel="stylesheet" href="./css/projects.css">
 
     <!--Scripts-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="/js/main.js" defer></script>
-    <script src="/js/goal.js" defer></script>
-    <script src="/js/priorities.js" defer></script>
+    <script src="./js/main.js" defer></script>
+    <script src="./js/goal.js" defer></script>
+    <script src="./js/priorities.js" defer></script>
+    <script src="./js/projects.js" defer></script>
 </head>
 
 <body>
@@ -335,16 +337,123 @@
             </div>
         </div>
 
-        <!-- Proyectos -->
+        <!-- Proyectos - Sistema completo de gestión -->
         <section id="projects-page" class="page">
             <article class="card">
-                <div class="card-title"><i class="fas fa-microchip"></i> Proyectos Estratégicos</div>
-                <div id="projects-list" class="tracking-list"></div>
-                <button class="btn-primary" style="margin-top:20px;" id="add-project-btn">
-                    <i class="fas fa-plus"></i> Nuevo Proyecto
-                </button>
+                <div class="card-title">
+                    <i class="fas fa-microchip"></i>
+                    Proyectos Estratégicos
+                    <span style="font-size: 0.8rem; margin-left: auto;" id="projectsTotalDisplay">Total: 0</span>
+                </div>
+        
+                <div class="projects-dashboard">
+                    <!-- Panel de estadísticas -->
+                    <div class="projects-stats">
+                        <div class="stat-pill">
+                            <i class="fas fa-chart-line"></i>
+                            <span id="projectsProgressCount">0</span> En progreso
+                        </div>
+                        <div class="stat-pill">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="projectsPlannedCount">0</span> Planificados
+                        </div>
+                        <div class="stat-pill">
+                            <i class="fas fa-check-circle"></i>
+                            <span id="projectsCompletedCount">0</span> Completados
+                        </div>
+                        <div class="stat-pill">
+                            <i class="fas fa-folder-open"></i>
+                            <span id="projectsTotalCount">0</span> Total
+                        </div>
+                    </div>
+        
+                    <!-- Lista de proyectos -->
+                    <div class="projects-list-container">
+                        <div class="list-header">
+                            <h3><i class="fas fa-list"></i> Mis Proyectos</h3>
+                            <button class="btn-add-project" id="add-project-btn">
+                                <i class="fas fa-plus"></i> Nuevo Proyecto
+                            </button>
+                        </div>
+                        <div id="projects-list" class="projects-items">
+                            <!-- Se llena con JavaScript -->
+                        </div>
+                    </div>
+                </div>
             </article>
         </section>
+        
+        <!-- Modal para agregar/editar proyecto -->
+        <div id="projectModal" class="modal-overlay project-modal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3 id="projectModalTitle"><i class="fas fa-plus-circle"></i> Nuevo Proyecto</h3>
+                    <button class="modal-close" onclick="closeProjectModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label><i class="fas fa-tag"></i> Nombre del proyecto *</label>
+                            <input type="text" id="projectName" placeholder="Ej: Sistema IoT Industrial" autocomplete="off">
+                        </div>
+                        <div class="form-group half">
+                            <label><i class="fas fa-layer-group"></i> Área *</label>
+                            <input type="text" id="projectArea" placeholder="Ej: Ciberseguridad, IoT, Redes">
+                        </div>
+                    </div>
+        
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label><i class="fas fa-signal"></i> Nivel</label>
+                            <select id="projectLevel">
+                                <option value="Básico">📘 Básico</option>
+                                <option value="Medio" selected>📙 Medio</option>
+                                <option value="Pro">🚀 Pro</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label><i class="fas fa-flag-checkered"></i> Estado</label>
+                            <select id="projectStatus">
+                                <option value="Planificado">📋 Planificado</option>
+                                <option value="En progreso">⚡ En progreso</option>
+                                <option value="Completado">✅ Completado</option>
+                                <option value="Pausado">⏸️ Pausado</option>
+                            </select>
+                        </div>
+                    </div>
+        
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label><i class="fas fa-play"></i> Fecha inicio</label>
+                            <input type="date" id="projectStartDate">
+                        </div>
+                        <div class="form-group half">
+                            <label><i class="fas fa-stop"></i> Fecha fin</label>
+                            <input type="date" id="projectEndDate">
+                        </div>
+                    </div>
+        
+                    <div class="form-group">
+                        <label><i class="fas fa-align-left"></i> Descripción</label>
+                        <textarea id="projectDescription" rows="2"
+                            placeholder="Describe los objetivos y alcance del proyecto..."></textarea>
+                    </div>
+        
+                    <div class="form-group">
+                        <label><i class="fas fa-code"></i> Tecnologías / Herramientas</label>
+                        <div class="tech-input-group">
+                            <input type="text" id="projectTechInput" placeholder="Ej: Python, React, AWS, Docker">
+                            <button type="button" id="addTechBtn" class="btn-add-tech">+ Agregar</button>
+                        </div>
+                        <div id="projectTechList" class="tech-list"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" onclick="closeProjectModal()">Cancelar</button>
+                    <button class="btn-save-modal" id="saveProjectBtn"><i class="fas fa-save"></i> Guardar Proyecto</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Certificaciones -->
         <section id="certifications-page" class="page">

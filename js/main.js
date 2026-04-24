@@ -1,5 +1,6 @@
 // ============================================
-// MAIN.JS - SISTEMA PRINCIPAL
+// MAIN.JS - SISTEMA PRINCIPAL DEPURADO
+// (Sin interferencias con módulos independientes)
 // ============================================
 
 // Función global para mostrar toast
@@ -214,27 +215,24 @@ function updateDateTimeDisplay() {
     }
 }
 
-// ===== OTRAS SECCIONES =====
-let projectsList = [
-    { name: "Auditoría IoT ISO 27002", level: "Pro", area: "Ciberseguridad", status: "En progreso" },
-    { name: "Sistema seguridad ESP32", level: "Medio", area: "Hardware", status: "Planificado" }
-];
-
+// ===== CERTIFICACIONES =====
 let certificationsList = [
     { name: "Cisco CCNA", entity: "Cisco", level: "Junior", startDate: "2025-01-01", endDate: "2025-06-30", status: "En curso", progress: 40 },
     { name: "AWS Cloud Practitioner", entity: "AWS", level: "Fundamentos", status: "Completado", progress: 100 }
 ];
 
+// ===== PLAN DE ESTUDIO =====
 let studyPlanList = [
     { name: "Maestría Ciberseguridad", institution: "UNIR", duration: "2026-2027", status: "Planificado" }
 ];
 
+// ===== CV Y HABILIDADES =====
 let skillsList = ["Pentesting", "Python", "React", "AWS", "PLC/SCADA"];
 let toolsList = ["Nmap", "Wireshark", "Metasploit", "Kali Linux"];
 
+// ===== FUNCIONES DE PERSISTENCIA =====
 function saveOtherDataToLocal() {
     const otherData = {
-        projects: projectsList,
         certifications: certificationsList,
         studyPlan: studyPlanList,
         skills: skillsList,
@@ -248,7 +246,6 @@ function loadOtherDataFromLocal() {
     if (saved) {
         try {
             const data = JSON.parse(saved);
-            if (data.projects) projectsList = data.projects;
             if (data.certifications) certificationsList = data.certifications;
             if (data.studyPlan) studyPlanList = data.studyPlan;
             if (data.skills) skillsList = data.skills;
@@ -257,24 +254,13 @@ function loadOtherDataFromLocal() {
     }
 }
 
-function renderProjects() {
-    const container = document.getElementById("projects-list");
-    if (container) {
-        container.innerHTML = projectsList.map((p, i) => `
-            <div class="tracking-item">
-                <div><strong>${p.name}</strong><br><small>${p.area} | ${p.level}</small></div>
-                <div>${p.status}<button class="btn-secondary" style="margin-left:12px;" onclick="editProject(${i})">Editar</button></div>
-            </div>
-        `).join("");
-    }
-}
-
+// ===== RENDERIZADO DE SECCIONES =====
 function renderCertifications() {
     const container = document.getElementById("certifications-list");
     if (container) {
         container.innerHTML = certificationsList.map((c, i) => `
             <div class="tracking-item">
-                <div><strong>${c.name}</strong><br><small>${c.entity} | ${c.level}</small>
+                <div><strong>${escapeHtml(c.name)}</strong><br><small>${c.entity} | ${c.level}</small>
                 <div class="progress-bar"><div class="progress-fill" style="width:${c.progress}%"></div></div></div>
                 <div>${c.status}<button class="btn-secondary" style="margin-left:12px;" onclick="editCert(${i})">Editar</button></div>
             </div>
@@ -287,7 +273,7 @@ function renderStudyPlan() {
     if (container) {
         container.innerHTML = studyPlanList.map((s, i) => `
             <div class="tracking-item">
-                <div><strong>${s.name}</strong><br><small>${s.institution} | ${s.duration}</small></div>
+                <div><strong>${escapeHtml(s.name)}</strong><br><small>${s.institution} | ${s.duration}</small></div>
                 <div>${s.status}<button class="btn-secondary" style="margin-left:12px;" onclick="editStudyPlan(${i})">Editar</button></div>
             </div>
         `).join("");
@@ -298,22 +284,29 @@ function renderCV() {
     const skillsDiv = document.getElementById("skills-list");
     if (skillsDiv) {
         skillsDiv.innerHTML = skillsList.map((s, i) => `
-            <div class="tracking-item" style="margin-bottom:8px;">${s}<button class="btn-secondary" style="margin-left:auto;" onclick="removeSkill(${i})">🗑️</button></div>
+            <div class="tracking-item" style="margin-bottom:8px;">${escapeHtml(s)}<button class="btn-secondary" style="margin-left:auto;" onclick="removeSkill(${i})">🗑️</button></div>
         `).join("");
     }
     const toolsDiv = document.getElementById("tools-list");
     if (toolsDiv) {
         toolsDiv.innerHTML = toolsList.map((t, i) => `
-            <div class="tracking-item" style="margin-bottom:8px;">${t}<button class="btn-secondary" style="margin-left:auto;" onclick="removeTool(${i})">🗑️</button></div>
+            <div class="tracking-item" style="margin-bottom:8px;">${escapeHtml(t)}<button class="btn-secondary" style="margin-left:auto;" onclick="removeTool(${i})">🗑️</button></div>
         `).join("");
     }
 }
 
+// Home stats
 function updateLandingStats() {
-    const projectsEl = document.getElementById("landing-projects");
+    // Los proyectos ahora son manejados por projects-module.js
+    // Solo actualizamos certificaciones
     const certsEl = document.getElementById("landing-certs");
-    if (projectsEl) projectsEl.innerText = projectsList.length;
     if (certsEl) certsEl.innerText = certificationsList.length;
+    
+    // El contador de proyectos se actualizará mediante evento
+    if (typeof getProjectsList !== 'undefined') {
+        const projectsEl = document.getElementById("landing-projects");
+        if (projectsEl) projectsEl.innerText = getProjectsList().length;
+    }
 }
 
 function renderGoalsTimeline() {
@@ -328,14 +321,15 @@ function renderGoalsTimeline() {
     }
 }
 
-// Funciones de edición
-window.editProject = function(i) {
-    let newName = prompt("Nombre:", projectsList[i].name);
-    if (newName) projectsList[i].name = newName;
-    renderProjects();
-    saveOtherDataToLocal();
-};
+// Función auxiliar escapeHtml
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 
+// ===== FUNCIONES DE EDICIÓN =====
 window.editCert = function(i) {
     let newProgress = prompt("Progreso (0-100):", certificationsList[i].progress);
     if (newProgress) {
@@ -365,17 +359,20 @@ window.removeTool = function(i) {
     saveOtherDataToLocal();
 };
 
-// Eventos de navegación
+// ===== EVENTOS DE NAVEGACIÓN =====
 document.querySelectorAll(".nav-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         document.querySelectorAll(".page").forEach(p => p.classList.remove("active-page"));
-        document.getElementById(`${btn.dataset.page}-page`).classList.add("active-page");
+        const pageId = `${btn.dataset.page}-page`;
+        const pageElement = document.getElementById(pageId);
+        if (pageElement) pageElement.classList.add("active-page");
         
+        // Renderizar según la página
         if (btn.dataset.page === "schedule") { renderScheduleTable(); updateDateTimeDisplay(); }
         if (btn.dataset.page === "priorities" && typeof renderPriorities !== 'undefined') renderPriorities();
-        if (btn.dataset.page === "projects") renderProjects();
+        if (btn.dataset.page === "projects" && typeof renderProjects !== 'undefined') renderProjects();
         if (btn.dataset.page === "certifications") renderCertifications();
         if (btn.dataset.page === "studyplan") renderStudyPlan();
         if (btn.dataset.page === "cv") renderCV();
@@ -383,7 +380,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     });
 });
 
-// Botones del horario
+// ===== BOTONES DEL HORARIO =====
 const saveScheduleBtn = document.getElementById("save-schedule-btn");
 const clearScheduleBtn = document.getElementById("clear-schedule-btn");
 const resetScheduleBtn = document.getElementById("reset-schedule-btn");
@@ -410,21 +407,12 @@ if (resetScheduleBtn) {
     });
 }
 
-// Botones de agregar
-const addProjectBtn = document.getElementById("add-project-btn");
+// ===== BOTONES DE AGREGAR (excluyendo proyectos que van por separado) =====
 const addCertBtn = document.getElementById("add-cert-btn");
 const addStudyplanBtn = document.getElementById("add-studyplan-btn");
 const addSkillBtn = document.getElementById("add-skill-btn");
 const addToolBtn = document.getElementById("add-tool-btn");
 
-if (addProjectBtn) {
-    addProjectBtn.addEventListener("click", () => {
-        let name = prompt("Nombre proyecto:");
-        if (name) projectsList.push({ name, level: "Medio", area: "General", status: "Planificado" });
-        renderProjects();
-        saveOtherDataToLocal();
-    });
-}
 if (addCertBtn) {
     addCertBtn.addEventListener("click", () => {
         let name = prompt("Nombre certificación:");
@@ -454,7 +442,7 @@ if (addToolBtn) {
     });
 }
 
-// Modal de horario
+// ===== MODAL DE HORARIO =====
 const closeModalBtn = document.getElementById("closeModalBtn");
 const cancelModalBtn = document.getElementById("cancelModalBtn");
 const saveModalBtn = document.getElementById("saveModalBtn");
@@ -476,12 +464,18 @@ document.querySelectorAll(".type-option").forEach(opt => {
 });
 window.selectedType = "personal";
 
-// Escuchar actualizaciones de prioridades
+// ===== ESCUCHAR EVENTOS DE MÓDULOS EXTERNOS =====
 document.addEventListener('prioritiesUpdated', (e) => {
     console.log('📢 Prioridades actualizadas recibido en main.js');
+    updateLandingStats();
 });
 
-// Inicialización
+document.addEventListener('projectsUpdated', (e) => {
+    console.log('📢 Proyectos actualizados recibido en main.js');
+    updateLandingStats();
+});
+
+// ===== INICIALIZACIÓN =====
 loadScheduleFromLocal();
 loadOtherDataFromLocal();
 renderScheduleTable();
@@ -489,7 +483,6 @@ updateDateTimeDisplay();
 setInterval(() => { updateDateTimeDisplay(); renderScheduleTable(); }, 10000);
 
 // Renderizar otras secciones
-renderProjects();
 renderCertifications();
 renderStudyPlan();
 renderCV();
