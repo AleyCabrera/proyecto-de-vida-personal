@@ -1,0 +1,321 @@
+/* ===== METAS - NUEVA SECCIÓN MEJORADA ===== */
+.goals-management {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Formulario para agregar nueva meta */
+.goals-form-container {
+    background: rgba(15, 25, 45, 0.5);
+    border-radius: 24px;
+    padding: 24px;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.goals-form-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.goals-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.goals-form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.goals-form-row input, 
+.goals-form-row select {
+    flex: 1;
+    min-width: 150px;
+}
+
+.goals-form input,
+.goals-form select,
+.goals-form textarea {
+    background: #0a1128;
+    border: 1px solid #2d3a5e;
+    border-radius: 20px;
+    padding: 12px 16px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.goals-form input:focus,
+.goals-form select:focus,
+.goals-form textarea:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.3);
+}
+
+.goals-form textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+/* Indicador de ordenamiento cronológico */
+.goals-order-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-bottom: 16px;
+    padding: 6px 12px;
+    background: rgba(100, 116, 139, 0.1);
+    border-radius: 20px;
+}
+
+.goals-order-indicator i {
+    color: #dc2626;
+    font-size: 0.8rem;
+}
+
+/* Mejora para la visualización de años */
+.goal-year {
+    display: inline-block;
+    background: #dc2626;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-family: 'Space Mono', monospace;
+}
+
+/* Años más lejanos con estilo sutil */
+.goal-year[data-year="2033"],
+.goal-year[data-year="2034"],
+.goal-year[data-year="2035"] {
+    background: #7c3aed;
+    opacity: 0.9;
+}
+
+/* Lista de metas activas */
+.goals-active-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.goal-item {
+    background: rgba(15, 25, 45, 0.6);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-left: 4px solid #dc2626;
+    transition: all 0.3s ease;
+}
+
+.goal-item:hover {
+    transform: translateX(5px);
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.goal-check {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    accent-color: #10b981;
+}
+
+.goal-content {
+    flex: 2;
+    min-width: 200px;
+}
+
+.goal-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+.goal-year {
+    display: inline-block;
+    background: #dc2626;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.goal-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.goal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.goal-btn-edit, .goal-btn-delete {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.goal-btn-edit {
+    background: #3b82f6;
+    color: white;
+}
+
+.goal-btn-edit:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+}
+
+.goal-btn-delete {
+    background: #dc2626;
+    color: white;
+}
+
+.goal-btn-delete:hover {
+    background: #b91c1c;
+    transform: scale(1.05);
+}
+
+/* Metas completadas - Historial */
+.completed-section {
+    margin-top: 32px;
+    border-top: 1px solid rgba(220, 38, 38, 0.3);
+    padding-top: 24px;
+}
+
+.completed-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #10b981;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.completed-stats {
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 16px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.completed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.completed-item {
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    opacity: 0.8;
+    border-left: 3px solid #10b981;
+}
+
+.completed-item .goal-title {
+    text-decoration: line-through;
+    opacity: 0.7;
+    font-size: 1rem;
+}
+
+.completed-date {
+    font-size: 0.7rem;
+    color: #10b981;
+}
+
+.btn-restore {
+    background: #2d3a5e;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: 0.2s;
+}
+
+.btn-restore:hover {
+    background: #3b4a6e;
+}
+
+.btn-clear-history {
+    background: transparent;
+    border: 1px solid #dc2626;
+    padding: 8px 20px;
+    border-radius: 30px;
+    color: #dc2626;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: 0.2s;
+}
+
+.btn-clear-history:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* Modal de edición */
+.goal-edit-modal .modal-container {
+    max-width: 500px;
+}
+
+/* Meta badge vacía */
+.empty-goals {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .goal-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .goal-actions {
+        align-self: flex-end;
+    }
+    
+    .goals-form-row {
+        flex-direction: column;
+    }
+}
