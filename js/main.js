@@ -216,10 +216,10 @@ function updateDateTimeDisplay() {
 }
 
 // ===== CERTIFICACIONES =====
-let certificationsList = [
-    { name: "Cisco CCNA", entity: "Cisco", level: "Junior", startDate: "2025-01-01", endDate: "2025-06-30", status: "En curso", progress: 40 },
-    { name: "AWS Cloud Practitioner", entity: "AWS", level: "Fundamentos", status: "Completado", progress: 100 }
-];
+// let certificationsList = [
+//     { name: "Cisco CCNA", entity: "Cisco", level: "Junior", startDate: "2025-01-01", endDate: "2025-06-30", status: "En curso", progress: 40 },
+//     { name: "AWS Cloud Practitioner", entity: "AWS", level: "Fundamentos", status: "Completado", progress: 100 }
+// ];
 
 // ===== PLAN DE ESTUDIO =====
 let studyPlanList = [
@@ -255,18 +255,18 @@ function loadOtherDataFromLocal() {
 }
 
 // ===== RENDERIZADO DE SECCIONES =====
-function renderCertifications() {
-    const container = document.getElementById("certifications-list");
-    if (container) {
-        container.innerHTML = certificationsList.map((c, i) => `
-            <div class="tracking-item">
-                <div><strong>${escapeHtml(c.name)}</strong><br><small>${c.entity} | ${c.level}</small>
-                <div class="progress-bar"><div class="progress-fill" style="width:${c.progress}%"></div></div></div>
-                <div>${c.status}<button class="btn-secondary" style="margin-left:12px;" onclick="editCert(${i})">Editar</button></div>
-            </div>
-        `).join("");
-    }
-}
+// function renderCertifications() {
+//     const container = document.getElementById("certifications-list");
+//     if (container) {
+//         container.innerHTML = certificationsList.map((c, i) => `
+//             <div class="tracking-item">
+//                 <div><strong>${escapeHtml(c.name)}</strong><br><small>${c.entity} | ${c.level}</small>
+//                 <div class="progress-bar"><div class="progress-fill" style="width:${c.progress}%"></div></div></div>
+//                 <div>${c.status}<button class="btn-secondary" style="margin-left:12px;" onclick="editCert(${i})">Editar</button></div>
+//             </div>
+//         `).join("");
+//     }
+// }
 
 function renderStudyPlan() {
     const container = document.getElementById("studyplan-list");
@@ -330,15 +330,15 @@ function escapeHtml(text) {
 }
 
 // ===== FUNCIONES DE EDICIÓN =====
-window.editCert = function(i) {
-    let newProgress = prompt("Progreso (0-100):", certificationsList[i].progress);
-    if (newProgress) {
-        certificationsList[i].progress = parseInt(newProgress);
-        if (certificationsList[i].progress >= 100) certificationsList[i].status = "Completado";
-        renderCertifications();
-        saveOtherDataToLocal();
-    }
-};
+// window.editCert = function(i) {
+//     let newProgress = prompt("Progreso (0-100):", certificationsList[i].progress);
+//     if (newProgress) {
+//         certificationsList[i].progress = parseInt(newProgress);
+//         if (certificationsList[i].progress >= 100) certificationsList[i].status = "Completado";
+//         renderCertifications();
+//         saveOtherDataToLocal();
+//     }
+// };
 
 window.editStudyPlan = function(i) {
     let newStatus = prompt("Estado:", studyPlanList[i].status);
@@ -408,19 +408,19 @@ if (resetScheduleBtn) {
 }
 
 // ===== BOTONES DE AGREGAR (excluyendo proyectos que van por separado) =====
-const addCertBtn = document.getElementById("add-cert-btn");
+// const addCertBtn = document.getElementById("add-cert-btn");
 const addStudyplanBtn = document.getElementById("add-studyplan-btn");
 const addSkillBtn = document.getElementById("add-skill-btn");
 const addToolBtn = document.getElementById("add-tool-btn");
 
-if (addCertBtn) {
-    addCertBtn.addEventListener("click", () => {
-        let name = prompt("Nombre certificación:");
-        if (name) certificationsList.push({ name, entity: "Institución", level: "Básico", startDate: "2025-01-01", endDate: "2025-12-31", status: "En curso", progress: 0 });
-        renderCertifications();
-        saveOtherDataToLocal();
-    });
-}
+// if (addCertBtn) {
+//     addCertBtn.addEventListener("click", () => {
+//         let name = prompt("Nombre certificación:");
+//         if (name) certificationsList.push({ name, entity: "Institución", level: "Básico", startDate: "2025-01-01", endDate: "2025-12-31", status: "En curso", progress: 0 });
+//         renderCertifications();
+//         saveOtherDataToLocal();
+//     });
+// }
 if (addStudyplanBtn) {
     addStudyplanBtn.addEventListener("click", () => {
         let name = prompt("Curso/Materia:");
@@ -475,6 +475,11 @@ document.addEventListener('projectsUpdated', (e) => {
     updateLandingStats();
 });
 
+document.addEventListener('certificationsUpdated', (e) => {
+    console.log('📢 Certificaciones actualizadas');
+    updateLandingStats();
+});
+
 // ===== INICIALIZACIÓN =====
 loadScheduleFromLocal();
 loadOtherDataFromLocal();
@@ -483,7 +488,7 @@ updateDateTimeDisplay();
 setInterval(() => { updateDateTimeDisplay(); renderScheduleTable(); }, 10000);
 
 // Renderizar otras secciones
-renderCertifications();
+// renderCertifications();
 renderStudyPlan();
 renderCV();
 updateLandingStats();
