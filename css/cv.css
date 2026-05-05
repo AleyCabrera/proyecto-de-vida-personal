@@ -1,0 +1,231 @@
+/* ============================================
+   CV Y HABILIDADES - ESTILOS EXCLUSIVOS
+   ============================================ */
+
+/* Dashboard de CV */
+.cv-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Panel de estadísticas */
+.cv-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.cv-stats .stat-pill {
+    background: rgba(15, 25, 45, 0.6);
+    border-radius: 40px;
+    padding: 10px 24px;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cv-stats .stat-pill i {
+    color: #dc2626;
+}
+
+.cv-stats .stat-pill span {
+    font-weight: 700;
+    color: #dc2626;
+    font-size: 1.1rem;
+    margin: 0 4px;
+}
+
+/* Contenedor de habilidades y herramientas */
+.cv-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+}
+
+.cv-card {
+    background: rgba(10, 17, 40, 0.5);
+    border-radius: 24px;
+    padding: 20px;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    transition: all 0.2s;
+}
+
+.cv-card:hover {
+    border-color: rgba(220, 38, 38, 0.5);
+}
+
+.cv-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cv-card-header h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    color: #dc2626;
+}
+
+.btn-add-cv {
+    background: #dc2626;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-add-cv:hover {
+    background: #b91c1c;
+    transform: scale(1.02);
+}
+
+/* Lista de items */
+.cv-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.cv-item {
+    background: rgba(15, 25, 45, 0.6);
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+    border-left: 3px solid #dc2626;
+}
+
+.cv-item:hover {
+    transform: translateX(4px);
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.cv-item-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.cv-item-delete {
+    background: rgba(15, 25, 45, 0.8);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    color: #dc2626;
+}
+
+.cv-item-delete:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* Estado vacío */
+.empty-cv {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+}
+
+.empty-cv i {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+/* Scrollbar */
+.cv-items-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cv-items-list::-webkit-scrollbar-track {
+    background: #1e2a3a;
+    border-radius: 10px;
+}
+
+.cv-items-list::-webkit-scrollbar-thumb {
+    background: #dc2626;
+    border-radius: 10px;
+}
+
+/* Modal para agregar item */
+.cv-modal .modal-container {
+    max-width: 450px;
+}
+
+.cv-modal .form-group {
+    margin-bottom: 20px;
+}
+
+.cv-modal .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+}
+
+.cv-modal .form-group input {
+    width: 100%;
+    background: #0a1128;
+    border: 1px solid #2d3a5e;
+    border-radius: 20px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.cv-modal .form-group input:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cv-grid-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .cv-stats {
+        gap: 10px;
+    }
+    
+    .cv-stats .stat-pill {
+        padding: 6px 14px;
+        font-size: 0.7rem;
+    }
+    
+    .cv-card-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-add-cv {
+        justify-content: center;
+    }
+}

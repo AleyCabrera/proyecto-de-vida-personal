@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="./css/projects.css">
     <link rel="stylesheet" href="./css/certificaciones.css">
     <link rel="stylesheet" href="./css/studyplan.css">
+    <link rel="stylesheet" href="./css/cv.css">
 
     <!--Scripts-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -27,6 +28,7 @@
     <script src="./js/projects.js" defer></script>
     <script src="./js/certificaciones.js" defer></script>
     <script src="./js/studyplan.js" defer></script>
+    <script src="./js/cv.js" defer></script>
     <script src="./js/main.js" defer></script>
 </head>
 
@@ -35,7 +37,7 @@
         <div class="nav-container">
             <div class="logo">
                 <i class="fa-brands fa-phoenix-squadron"></i>
-                <span>Aley Cabrera</span>
+                <span>Proyecto de vida</span>
             </div>
             <div class="nav-links">
                 <button class="nav-btn active" data-page="home"><i class="fas fa-home"></i> Inicio</button>
@@ -708,25 +710,76 @@
         <!-- CV y Habilidades -->
         <section id="cv-page" class="page">
             <article class="card">
-                <div class="card-title"><i class="fas fa-user"></i> CV & Habilidades</div>
-                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px;">
-                    <div>
-                        <h3 style="color: #dc2626; margin-bottom: 16px;"><i class="fas fa-brain"></i> Habilidades</h3>
-                        <div id="skills-list" class="tracking-list"></div>
-                        <button class="btn-secondary" style="margin-top:12px;" id="add-skill-btn">
-                            <i class="fas fa-plus"></i> Agregar Habilidad
-                        </button>
+                <div class="card-title">
+                    <i class="fas fa-user"></i>
+                    CV & Habilidades
+                    <span style="font-size: 0.8rem; margin-left: auto;" id="cvTotalDisplay">Total: 0</span>
+                </div>
+        
+                <div class="cv-dashboard">
+                    <!-- Panel de estadísticas -->
+                    <div class="cv-stats">
+                        <div class="stat-pill">
+                            <i class="fas fa-brain"></i>
+                            <span id="cvSkillsCount">0</span> Habilidades
+                        </div>
+                        <div class="stat-pill">
+                            <i class="fas fa-tools"></i>
+                            <span id="cvToolsCount">0</span> Herramientas
+                        </div>
+                        <div class="stat-pill">
+                            <i class="fas fa-chart-simple"></i>
+                            <span id="cvTotalCount">0</span> Total
+                        </div>
                     </div>
-                    <div>
-                        <h3 style="color: #dc2626; margin-bottom: 16px;"><i class="fas fa-tools"></i> Herramientas</h3>
-                        <div id="tools-list" class="tracking-list"></div>
-                        <button class="btn-secondary" style="margin-top:12px;" id="add-tool-btn">
-                            <i class="fas fa-plus"></i> Agregar Herramienta
-                        </button>
+        
+                    <!-- Grid de habilidades y herramientas -->
+                    <div class="cv-grid-container">
+                        <!-- Habilidades -->
+                        <div class="cv-card">
+                            <div class="cv-card-header">
+                                <h3><i class="fas fa-brain"></i> Habilidades</h3>
+                                <button class="btn-add-cv" id="add-skill-btn">
+                                    <i class="fas fa-plus"></i> Agregar Habilidad
+                                </button>
+                            </div>
+                            <div id="skills-list" class="cv-items-list"></div>
+                        </div>
+        
+                        <!-- Herramientas -->
+                        <div class="cv-card">
+                            <div class="cv-card-header">
+                                <h3><i class="fas fa-tools"></i> Herramientas</h3>
+                                <button class="btn-add-cv" id="add-tool-btn">
+                                    <i class="fas fa-plus"></i> Agregar Herramienta
+                                </button>
+                            </div>
+                            <div id="tools-list" class="cv-items-list"></div>
+                        </div>
                     </div>
                 </div>
             </article>
         </section>
+        
+        <!-- Modal para agregar/editar item de CV -->
+        <div id="cvModal" class="modal-overlay cv-modal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3 id="cvModalTitle"><i class="fas fa-plus-circle"></i> Agregar Item</h3>
+                    <button class="modal-close" onclick="window.closeCVModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label id="cvModalLabel"><i class="fas fa-tag"></i> Nombre</label>
+                        <input type="text" id="cvItemName" placeholder="Ej: Python, Docker, etc." autocomplete="off">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" onclick="window.closeCVModal()">Cancelar</button>
+                    <button class="btn-save-modal" id="saveCVBtn"><i class="fas fa-save"></i> Guardar</button>
+                </div>
+            </div>
+        </div>
     </main>
     
     <!-- Modal para edición de actividades -->
