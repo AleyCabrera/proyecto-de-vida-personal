@@ -1,5 +1,6 @@
 // ============================================
-// MAIN.JS - SISTEMA PRINCIPAL CORREGIDO
+// MAIN.JS - SISTEMA PRINCIPAL DEPURADO
+// (Sin CV - ahora es módulo independiente)
 // ============================================
 
 // Función global para mostrar toast
@@ -78,7 +79,6 @@ function initDefaultSchedule() {
 }
 initDefaultSchedule();
 
-// Clave para horario en localStorage
 const SCHEDULE_STORAGE_KEY = 'aley_schedule_data';
 
 function saveScheduleToLocal() {
@@ -135,7 +135,7 @@ function renderScheduleTable() {
     const thead = document.getElementById("schedule-head");
     const tbody = document.getElementById("schedule-body");
     if (!thead || !tbody) return;
-    thead.innerHTML = "<table><th>Hora</th>" + days.map(d => `<th>${d}</th>`).join("") + "</tr>";
+    thead.innerHTML = "<tr><th>Hora</th>" + days.map(d => `<th>${d}</th>`).join("") + "</tr>";
     const highlight = getCurrentHighlightCell();
     let bodyHtml = "";
     for (let h of hours) {
@@ -214,58 +214,17 @@ function updateDateTimeDisplay() {
     }
 }
 
-// ===== CV Y HABILIDADES =====
-let skillsList = ["Pentesting", "Python", "React", "AWS", "PLC/SCADA"];
-let toolsList = ["Nmap", "Wireshark", "Metasploit", "Kali Linux"];
-
-// ===== FUNCIONES DE PERSISTENCIA (SOLO PARA CV) =====
-function saveCVDataToLocal() {
-    const cvData = {
-        skills: skillsList,
-        tools: toolsList
-    };
-    localStorage.setItem('aley_cv_data', JSON.stringify(cvData));
-}
-
-function loadCVDataFromLocal() {
-    const saved = localStorage.getItem('aley_cv_data');
-    if (saved) {
-        try {
-            const data = JSON.parse(saved);
-            if (data.skills) skillsList = data.skills;
-            if (data.tools) toolsList = data.tools;
-        } catch (e) {}
-    }
-}
-
-function renderCV() {
-    const skillsDiv = document.getElementById("skills-list");
-    if (skillsDiv) {
-        skillsDiv.innerHTML = skillsList.map((s, i) => `
-            <div class="tracking-item" style="margin-bottom:8px;">${escapeHtml(s)}<button class="btn-secondary" style="margin-left:auto;" onclick="removeSkill(${i})">🗑️</button></div>
-        `).join("");
-    }
-    const toolsDiv = document.getElementById("tools-list");
-    if (toolsDiv) {
-        toolsDiv.innerHTML = toolsList.map((t, i) => `
-            <div class="tracking-item" style="margin-bottom:8px;">${escapeHtml(t)}<button class="btn-secondary" style="margin-left:auto;" onclick="removeTool(${i})">🗑️</button></div>
-        `).join("");
-    }
-}
-
 // Home stats
 function updateLandingStats() {
     const projectsEl = document.getElementById("landing-projects");
     const certsEl = document.getElementById("landing-certs");
     
-    // Proyectos (desde módulo independiente)
-    if (typeof getProjectsList !== 'undefined') {
-        if (projectsEl) projectsEl.innerText = getProjectsList().length;
+    if (typeof window.getProjectsList !== 'undefined') {
+        if (projectsEl) projectsEl.innerText = window.getProjectsList().length;
     }
     
-    // Certificaciones (desde módulo independiente)
-    if (typeof getCertificationsList !== 'undefined') {
-        if (certsEl) certsEl.innerText = getCertificationsList().length;
+    if (typeof window.getCertificationsList !== 'undefined') {
+        if (certsEl) certsEl.innerText = window.getCertificationsList().length;
     }
 }
 
@@ -281,25 +240,13 @@ function renderGoalsTimeline() {
     }
 }
 
-// Función auxiliar escapeHtml
+// Función auxiliar escapeHtml (para uso interno)
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
-
-window.removeSkill = function(i) {
-    skillsList.splice(i, 1);
-    renderCV();
-    saveCVDataToLocal();
-};
-
-window.removeTool = function(i) {
-    toolsList.splice(i, 1);
-    renderCV();
-    saveCVDataToLocal();
-};
 
 // ===== EVENTOS DE NAVEGACIÓN =====
 document.querySelectorAll(".nav-btn").forEach(btn => {
@@ -311,13 +258,12 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
         const pageElement = document.getElementById(pageId);
         if (pageElement) pageElement.classList.add("active-page");
         
-        // Renderizar según la página (solo lo que existe)
         if (btn.dataset.page === "schedule") { renderScheduleTable(); updateDateTimeDisplay(); }
-        if (btn.dataset.page === "priorities" && typeof renderPriorities !== 'undefined') renderPriorities();
-        if (btn.dataset.page === "projects" && typeof renderProjects !== 'undefined') renderProjects();
-        if (btn.dataset.page === "certifications" && typeof renderCertifications !== 'undefined') renderCertifications();
-        if (btn.dataset.page === "studyplan" && typeof renderStudyPlan !== 'undefined') renderStudyPlan();
-        if (btn.dataset.page === "cv") renderCV();
+        if (btn.dataset.page === "priorities" && typeof window.renderPriorities !== 'undefined') window.renderPriorities();
+        if (btn.dataset.page === "projects" && typeof window.renderProjects !== 'undefined') window.renderProjects();
+        if (btn.dataset.page === "certifications" && typeof window.renderCertifications !== 'undefined') window.renderCertifications();
+        if (btn.dataset.page === "studyplan" && typeof window.renderStudyPlanModule !== 'undefined') window.renderStudyPlanModule();
+        if (btn.dataset.page === "cv" && typeof window.renderCV !== 'undefined') window.renderCV();
         if (btn.dataset.page === "home") { updateLandingStats(); renderGoalsTimeline(); }
     });
 });
@@ -349,23 +295,6 @@ if (resetScheduleBtn) {
     });
 }
 
-// ===== BOTONES DE AGREGAR (CV) =====
-const addSkillBtn = document.getElementById("add-skill-btn");
-const addToolBtn = document.getElementById("add-tool-btn");
-
-if (addSkillBtn) {
-    addSkillBtn.addEventListener("click", () => {
-        let skill = prompt("Nueva habilidad:");
-        if (skill) { skillsList.push(skill); renderCV(); saveCVDataToLocal(); }
-    });
-}
-if (addToolBtn) {
-    addToolBtn.addEventListener("click", () => {
-        let tool = prompt("Nueva herramienta:");
-        if (tool) { toolsList.push(tool); renderCV(); saveCVDataToLocal(); }
-    });
-}
-
 // ===== MODAL DE HORARIO =====
 const closeModalBtn = document.getElementById("closeModalBtn");
 const cancelModalBtn = document.getElementById("cancelModalBtn");
@@ -393,13 +322,12 @@ document.addEventListener('prioritiesUpdated', () => { updateLandingStats(); });
 document.addEventListener('projectsUpdated', () => { updateLandingStats(); });
 document.addEventListener('certificationsUpdated', () => { updateLandingStats(); });
 document.addEventListener('studyplanUpdated', () => { console.log('Plan de estudio actualizado'); });
+document.addEventListener('cvUpdated', () => { console.log('CV actualizado'); });
 
 // ===== INICIALIZACIÓN =====
 loadScheduleFromLocal();
-loadCVDataFromLocal();
 renderScheduleTable();
 updateDateTimeDisplay();
-renderCV();
 updateLandingStats();
 renderGoalsTimeline();
 setInterval(() => { updateDateTimeDisplay(); renderScheduleTable(); }, 10000);
