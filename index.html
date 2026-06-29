@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Proyecto de Vida</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!--Fonts-->
+    <!-- Fuentes - Solo una vez -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap"
         rel="stylesheet">
 
-    <!--Link CSS-->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.2.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/goal.css">
     <link rel="stylesheet" href="./css/schedule.css">
@@ -26,15 +26,15 @@
     <link rel="stylesheet" href="./css/studyplan.css">
     <link rel="stylesheet" href="./css/cv.css">
 
-    <!--Scripts-->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
-    
     <script src="./js/goal.js" defer></script>
     <script src="./js/priorities.js" defer></script>
     <script src="./js/projects.js" defer></script>
     <script src="./js/certificaciones.js" defer></script>
     <script src="./js/studyplan.js" defer></script>
     <script src="./js/cv.js" defer></script>
+    <script src="./js/confirm.js" defer></script>
     <script src="./js/main.js" defer></script>
 </head>
 
@@ -42,7 +42,7 @@
     <nav class="main-nav">
         <div class="nav-container">
             <div class="logo">
-                <i class="fa-brands fa-phoenix-squadron"></i>
+                <img src="./assets/img/phoenix.svg" alt="Logo Fénix" class="logo-icon">
                 <span>Proyecto de vida</span>
             </div>
             <div class="nav-links">
@@ -59,13 +59,14 @@
             </div>
         </div>
     </nav>
-    
+
     <main class="page-container">
-        <!-- Home Page -->
+        <!-- HOME PAGE -->
         <section id="home-page" class="page active-page">
-            <article class="hero-landing">
+            <div class="hero-landing">
                 <h1>Mi <span class="highlight">Proyecto de Vida</span></h1>
-                <p style="font-size: 1.2rem; margin: 20px 0;">Especialista en Arquitectura de Ciberseguridad para Infraestructura Cloud, IT, OT, IoT, IIoT y Sistemas Industriales.</p>
+                <p style="font-size: 1.2rem; margin: 20px 0;">Especialista en Arquitectura de Ciberseguridad para
+                    Infraestructura Cloud, IT, OT, IoT, IIoT y Sistemas Industriales.</p>
                 <div style="margin: 24px 0;">
                     <i class="fas fa-quote-left" style="color:#dc2626;"></i>
                     <em style="font-size: 1.1rem;">"El éxito no es la clave de la felicidad. La felicidad es la clave
@@ -94,16 +95,20 @@
                     onclick="document.querySelector('[data-page=\'schedule\']').click()">
                     <i class="fas fa-play"></i> Comenzar seguimiento
                 </button>
-            </article>
-            <!-- Contenedor del Video Motivacional -->
+            </div>
+
+            <!-- Video Motivacional -->
             <div class="video-motivational" id="motivationalVideoContainer">
-                <img class="video-thumbnail" id="videoThumbnail" src="https://img.youtube.com/vi/aJvOPtYUj1o/maxresdefault.jpg"
-                    alt="Vista previa del video: Jordi Sierra i Fabra">
-                <div class="play-button" id="playButton">
-                    <i class="fas fa-play"></i>
+                <div class="video-wrapper">
+                    <img class="video-thumbnail" id="videoThumbnail" src="https://img.youtube.com/vi/aJvOPtYUj1o/maxresdefault.jpg"
+                        alt="Vista previa del video: Jordi Sierra i Fabra">
+                    <div class="play-button" id="playButton">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="video-overlay"></div>
                 </div>
             </div>
-            
+
             <!-- Cita destacada -->
             <div class="motivational-quote">
                 <i class="fas fa-quote-left"></i>
@@ -113,8 +118,9 @@
             </div>
         </section>
 
+        <!-- GOALS PAGE -->
         <section id="goals-page" class="page">
-            <article class="card">
+            <div class="card">
                 <div class="card-title">
                     <i class="fas fa-bullseye"></i>
                     Mis Metas Estratégicas
@@ -124,7 +130,7 @@
                     <i class="fas fa-sort-amount-down-alt"></i>
                     Metas ordenadas cronológicamente (de la más cercana a la más lejana)
                 </div>
-        
+
                 <div class="goals-management">
                     <!-- Formulario para agregar nueva meta -->
                     <div class="goals-form-container">
@@ -154,7 +160,7 @@
                             </button>
                         </form>
                     </div>
-        
+
                     <!-- Metas Activas -->
                     <div>
                         <h3 style="color: #dc2626; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
@@ -164,7 +170,7 @@
                             <!-- Se llena con JS -->
                         </div>
                     </div>
-        
+
                     <!-- Metas Completadas (Historial) -->
                     <div class="completed-section">
                         <div class="completed-title">
@@ -180,9 +186,9 @@
                         </button>
                     </div>
                 </div>
-            </article>
+            </div>
         </section>
-        
+
         <!-- Modal para editar meta -->
         <div id="editGoalModal" class="modal-overlay goal-edit-modal">
             <div class="modal-container">
@@ -221,9 +227,9 @@
             </div>
         </div>
 
-        <!-- Horario 24h con Modal y resaltado de hora actual -->
+        <!-- SCHEDULE PAGE -->
         <section id="schedule-page" class="page">
-            <article class="card">
+            <div class="card">
                 <div class="card-title"><i class="fas fa-clock"></i> Horario Semanal 24h</div>
                 <div
                     style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
@@ -253,18 +259,18 @@
                     <i class="fas fa-mouse-pointer"></i> Click en cualquier celda para editar con panel moderno | La
                     celda en rojo brillante indica la hora actual
                 </p>
-            </article>
+            </div>
         </section>
 
-        <!-- Prioridades - Sistema completo de gestión -->
+        <!-- PRIORITIES PAGE -->
         <section id="priorities-page" class="page">
-            <article class="card">
+            <div class="card">
                 <div class="card-title">
                     <i class="fas fa-chart-simple"></i>
                     Prioridades Diarias
                     <span style="font-size: 0.8rem; margin-left: auto;" id="totalHoursDisplay">Total: 0h</span>
                 </div>
-        
+
                 <div class="priorities-dashboard">
                     <!-- Panel de estadísticas -->
                     <div class="priorities-stats">
@@ -281,14 +287,14 @@
                             Productividad: <span id="productivityScore">0</span>%
                         </div>
                     </div>
-        
+
                     <!-- Gráfico y lista en dos columnas -->
                     <div class="priorities-grid">
                         <!-- Columna izquierda: Gráfico -->
                         <div class="priorities-chart-container">
                             <canvas id="priorities-chart" class="priorities-chart"></canvas>
                         </div>
-        
+
                         <!-- Columna derecha: Lista de prioridades -->
                         <div class="priorities-list-container">
                             <div class="list-header">
@@ -303,9 +309,9 @@
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
         </section>
-        
+
         <!-- Modal para agregar/editar prioridad -->
         <div id="priorityModal" class="modal-overlay priority-modal">
             <div class="modal-container">
@@ -321,7 +327,8 @@
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-clock"></i> Horas diarias dedicadas</label>
-                        <input type="number" id="priorityHours" step="0.5" min="0.5" max="24" value="1" placeholder="Ej: 1.5">
+                        <input type="number" id="priorityHours" step="0.5" min="0.5" max="24" value="1"
+                            placeholder="Ej: 1.5">
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-palette"></i> Color representativo</label>
@@ -350,15 +357,15 @@
             </div>
         </div>
 
-        <!-- Proyectos - Sistema completo de gestión -->
+        <!-- PROJECTS PAGE -->
         <section id="projects-page" class="page">
-            <article class="card">
+            <div class="card">
                 <div class="card-title">
                     <i class="fas fa-microchip"></i>
                     Proyectos Estratégicos
                     <span style="font-size: 0.8rem; margin-left: auto;" id="projectsTotalDisplay">Total: 0</span>
                 </div>
-        
+
                 <div class="projects-dashboard">
                     <!-- Panel de estadísticas -->
                     <div class="projects-stats">
@@ -379,7 +386,7 @@
                             <span id="projectsTotalCount">0</span> Total
                         </div>
                     </div>
-        
+
                     <!-- Lista de proyectos -->
                     <div class="projects-list-container">
                         <div class="list-header">
@@ -393,9 +400,9 @@
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
         </section>
-        
+
         <!-- Modal para agregar/editar proyecto -->
         <div id="projectModal" class="modal-overlay project-modal">
             <div class="modal-container">
@@ -407,14 +414,15 @@
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-tag"></i> Nombre del proyecto *</label>
-                            <input type="text" id="projectName" placeholder="Ej: Sistema IoT Industrial" autocomplete="off">
+                            <input type="text" id="projectName" placeholder="Ej: Sistema IoT Industrial"
+                                autocomplete="off">
                         </div>
                         <div class="form-group half">
                             <label><i class="fas fa-layer-group"></i> Área *</label>
                             <input type="text" id="projectArea" placeholder="Ej: Ciberseguridad, IoT, Redes">
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-signal"></i> Nivel</label>
@@ -434,7 +442,7 @@
                             </select>
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-play"></i> Fecha inicio</label>
@@ -445,13 +453,13 @@
                             <input type="date" id="projectEndDate">
                         </div>
                     </div>
-        
+
                     <div class="form-group">
                         <label><i class="fas fa-align-left"></i> Descripción</label>
                         <textarea id="projectDescription" rows="2"
                             placeholder="Describe los objetivos y alcance del proyecto..."></textarea>
                     </div>
-        
+
                     <div class="form-group">
                         <label><i class="fas fa-code"></i> Tecnologías / Herramientas</label>
                         <div class="tech-input-group">
@@ -463,20 +471,21 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn-cancel" onclick="closeProjectModal()">Cancelar</button>
-                    <button class="btn-save-modal" id="saveProjectBtn"><i class="fas fa-save"></i> Guardar Proyecto</button>
+                    <button class="btn-save-modal" id="saveProjectBtn"><i class="fas fa-save"></i> Guardar
+                        Proyecto</button>
                 </div>
             </div>
         </div>
 
-        <!-- Certificaciones - Sistema completo de gestión -->
+        <!-- CERTIFICATIONS PAGE -->
         <section id="certifications-page" class="page">
-            <article class="card">
+            <div class="card">
                 <div class="card-title">
                     <i class="fas fa-certificate"></i>
                     Certificaciones - Seguimiento
                     <span style="font-size: 0.8rem; margin-left: auto;" id="certsTotalDisplay">Total: 0</span>
                 </div>
-        
+
                 <div class="certifications-dashboard">
                     <!-- Panel de estadísticas -->
                     <div class="certifications-stats">
@@ -497,7 +506,7 @@
                             <span id="certsAvgProgress">0</span>% Promedio
                         </div>
                     </div>
-        
+
                     <!-- Lista de certificaciones -->
                     <div class="certifications-list-container">
                         <div class="list-header">
@@ -511,10 +520,10 @@
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
         </section>
-        
-        <!-- Modal para certificaciones - Usando las clases estándar -->
+
+        <!-- Modal para certificaciones -->
         <div id="certModal" class="modal-overlay">
             <div class="modal-container">
                 <div class="modal-header">
@@ -532,7 +541,7 @@
                             <input type="text" id="certEntity" placeholder="Ej: Cisco, AWS, CompTIA">
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-signal"></i> Nivel</label>
@@ -553,7 +562,7 @@
                             </select>
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-calendar-alt"></i> Fecha inicio</label>
@@ -564,7 +573,7 @@
                             <input type="date" id="certEndDate">
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-barcode"></i> Código examen</label>
@@ -575,17 +584,18 @@
                             <input type="text" id="certCredentialId" placeholder="ID de la certificación">
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-chart-line"></i> Progreso (%)</label>
                             <input type="number" id="certProgress" min="0" max="100" value="0">
                         </div>
                     </div>
-        
+
                     <div class="form-group">
                         <label><i class="fas fa-align-left"></i> Descripción</label>
-                        <textarea id="certDescription" rows="2" placeholder="Detalles de la certificación..."></textarea>
+                        <textarea id="certDescription" rows="2"
+                            placeholder="Detalles de la certificación..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -595,15 +605,15 @@
             </div>
         </div>
 
-        <!-- Plan de Estudio - Línea de tiempo académica -->
+        <!-- STUDY PLAN PAGE -->
         <section id="studyplan-page" class="page">
-            <article class="card">
+            <div class="card">
                 <div class="card-title">
                     <i class="fas fa-graduation-cap"></i>
                     Plan de Estudio - Línea de Tiempo Académica
                     <span style="font-size: 0.8rem; margin-left: auto;" id="studyTotalDisplay">Total: 0</span>
                 </div>
-        
+
                 <div class="studyplan-dashboard">
                     <!-- Panel de estadísticas -->
                     <div class="studyplan-stats">
@@ -624,7 +634,7 @@
                             <span id="studyTotalCount">0</span> Total
                         </div>
                     </div>
-        
+
                     <!-- Lista con línea de tiempo -->
                     <div class="studyplan-list-container">
                         <div class="list-header">
@@ -638,9 +648,9 @@
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
         </section>
-        
+
         <!-- Modal para agregar/editar estudio -->
         <div id="studyModal" class="modal-overlay">
             <div class="modal-container">
@@ -659,7 +669,7 @@
                             <input type="text" id="studyInstitution" placeholder="Ej: Universidad Nacional">
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-signal"></i> Nivel</label>
@@ -682,7 +692,7 @@
                             </select>
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-calendar-alt"></i> Fecha inicio</label>
@@ -693,14 +703,14 @@
                             <input type="date" id="studyEndDate">
                         </div>
                     </div>
-        
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label><i class="fas fa-chart-line"></i> Progreso (%)</label>
                             <input type="number" id="studyProgress" min="0" max="100" value="0">
                         </div>
                     </div>
-        
+
                     <div class="form-group">
                         <label><i class="fas fa-align-left"></i> Descripción</label>
                         <textarea id="studyDescription" rows="2" placeholder="Detalles del programa..."></textarea>
@@ -713,15 +723,15 @@
             </div>
         </div>
 
-        <!-- CV y Habilidades -->
+        <!-- CV PAGE -->
         <section id="cv-page" class="page">
-            <article class="card">
+            <div class="card">
                 <div class="card-title">
                     <i class="fas fa-user"></i>
                     CV & Habilidades
                     <span style="font-size: 0.8rem; margin-left: auto;" id="cvTotalDisplay">Total: 0</span>
                 </div>
-        
+
                 <div class="cv-dashboard">
                     <!-- Panel de estadísticas -->
                     <div class="cv-stats">
@@ -738,7 +748,7 @@
                             <span id="cvTotalCount">0</span> Total
                         </div>
                     </div>
-        
+
                     <!-- Grid de habilidades y herramientas -->
                     <div class="cv-grid-container">
                         <!-- Habilidades -->
@@ -751,7 +761,7 @@
                             </div>
                             <div id="skills-list" class="cv-items-list"></div>
                         </div>
-        
+
                         <!-- Herramientas -->
                         <div class="cv-card">
                             <div class="cv-card-header">
@@ -764,9 +774,9 @@
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
         </section>
-        
+
         <!-- Modal para agregar/editar item de CV -->
         <div id="cvModal" class="modal-overlay cv-modal">
             <div class="modal-container">
@@ -786,8 +796,25 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal de Confirmación Personalizado -->
+        <div id="confirmModal" class="modal-overlay confirm-modal">
+            <div class="modal-container confirm-container">
+                <div class="modal-header confirm-header">
+                    <h3 id="confirmTitle"><i class="fas fa-question-circle"></i> Confirmar acción</h3>
+                    <button class="modal-close" onclick="closeConfirmModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body confirm-body">
+                    <p id="confirmMessage">¿Estás seguro de realizar esta acción?</p>
+                </div>
+                <div class="modal-footer confirm-footer">
+                    <button class="btn-cancel" id="confirmCancelBtn">Cancelar</button>
+                    <button class="btn-danger" id="confirmAcceptBtn">Aceptar</button>
+                </div>
+            </div>
+        </div>
     </main>
-    
+
     <!-- Modal para edición de actividades -->
     <div id="editModal" class="modal-overlay">
         <div class="modal-container">
