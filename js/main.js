@@ -17,12 +17,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('motivationalVideoContainer');
     const thumbnail = document.getElementById('videoThumbnail');
     const playBtn = document.getElementById('playButton');
+    let isPlaying = false;
+    let iframe = null;
 
     if (container && thumbnail && playBtn) {
         function loadVideo() {
-            if (container.querySelector('iframe')) return;
-            const iframe = document.createElement('iframe');
-            iframe.setAttribute('src', 'https://www.youtube.com/embed/aJvOPtYUj1o?autoplay=1&rel=0&modestbranding=1');
+            if (container.querySelector('iframe')) {
+                // Si ya existe, alternar reproducción
+                togglePlay();
+                return;
+            }
+            
+            // Crear iframe con controles visibles
+            iframe = document.createElement('iframe');
+            iframe.setAttribute('src', 'https://www.youtube.com/embed/aJvOPtYUj1o?autoplay=1&rel=0&modestbranding=1&controls=1&showinfo=0');
             iframe.setAttribute('title', 'Jordi Sierra i Fabra - Leer me salvó la vida');
             iframe.setAttribute('frameborder', '0');
             iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
@@ -32,7 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
             iframe.style.position = 'absolute';
             iframe.style.top = '0';
             iframe.style.left = '0';
+            iframe.style.zIndex = '5';
             
+            // Ocultar thumbnail y botón
+            thumbnail.style.transition = 'opacity 0.3s ease';
+            playBtn.style.transition = 'opacity 0.3s ease';
             thumbnail.style.opacity = '0';
             playBtn.style.opacity = '0';
             
@@ -40,9 +52,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 thumbnail.style.display = 'none';
                 playBtn.style.display = 'none';
                 container.appendChild(iframe);
+                isPlaying = true;
             }, 300);
         }
+        
+        function togglePlay() {
+            // YouTube no permite control directo desde JavaScript sin API
+            // Pero podemos recargar el iframe o mostrar controles
+            if (iframe) {
+                // Recargar con autoplay alternado
+                const currentSrc = iframe.getAttribute('src');
+                if (isPlaying) {
+                    // Pausar: recargar sin autoplay
+                    iframe.setAttribute('src', currentSrc.replace('autoplay=1', 'autoplay=0'));
+                    isPlaying = false;
+                } else {
+                    // Reproducir: recargar con autoplay
+                    iframe.setAttribute('src', currentSrc.replace('autoplay=0', 'autoplay=1'));
+                    isPlaying = true;
+                }
+            }
+        }
+        
+        // Click en el contenedor
         container.addEventListener('click', loadVideo);
+        
+        // Click en el botón de play
+        playBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            loadVideo();
+        });
     }
 });
 
