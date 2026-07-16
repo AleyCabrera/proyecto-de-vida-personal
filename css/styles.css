@@ -461,6 +461,8 @@ body {
     transition: transform 0.3s ease;
     overflow: hidden;
     max-height: 90vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-overlay.active .modal-container {
@@ -487,30 +489,10 @@ body {
     margin: 0;
 }
 
-.modal-close {
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-close:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
-}
-
 .modal-body {
-    padding: 28px;
+    padding: 24px 28px;
     overflow-y: auto;
-    flex: 1;
+    flex: 1 1 auto;
 }
 
 .modal-footer {
