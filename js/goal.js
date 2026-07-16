@@ -233,14 +233,43 @@ function restoreGoal(goalId) {
     showToastMessage('🔄 Meta restaurada a activas');
 }
 
-function deleteGoal(goalId) {
-    if (!confirm('¿Estás seguro de eliminar esta meta? Esta acción no se puede deshacer.')) return;
+// function deleteGoal(goalId) {
+//     if (!confirm('¿Estás seguro de eliminar esta meta? Esta acción no se puede deshacer.')) return;
     
-    goalsList = goalsList.filter(g => g.id !== goalId);
-    saveGoalsData();
-    renderGoals();
-    showToastMessage('🗑️ Meta eliminada');
+//     goalsList = goalsList.filter(g => g.id !== goalId);
+//     saveGoalsData();
+//     renderGoals();
+//     showToastMessage('🗑️ Meta eliminada');
+// }
+
+function deleteGoal(goalId) {
+    const goal = goalsList.find(g => g.id === goalId);
+    if (!goal) return;
+    
+    window.showConfirmModal(
+        `¿Estás seguro de eliminar la meta "${goal.name}"? Esta acción no se puede deshacer.`,
+        () => {
+            goalsList = goalsList.filter(g => g.id !== goalId);
+            saveGoalsData();
+            renderGoals();
+            showToastMessage('🗑️ Meta eliminada');
+        }
+    );
 }
+
+// function clearCompletedHistory() {
+//     if (completedGoals.length === 0) {
+//         showToastMessage('📜 No hay historial para limpiar');
+//         return;
+//     }
+    
+//     if (!confirm('¿Eliminar todo el historial de metas completadas? Esta acción no se puede deshacer.')) return;
+    
+//     completedGoals = [];
+//     saveGoalsData();
+//     renderGoals();
+//     showToastMessage('📜 Historial limpiado');
+// }
 
 function clearCompletedHistory() {
     if (completedGoals.length === 0) {
@@ -248,12 +277,15 @@ function clearCompletedHistory() {
         return;
     }
     
-    if (!confirm('¿Eliminar todo el historial de metas completadas? Esta acción no se puede deshacer.')) return;
-    
-    completedGoals = [];
-    saveGoalsData();
-    renderGoals();
-    showToastMessage('📜 Historial limpiado');
+    window.showConfirmModal(
+        '¿Eliminar todo el historial de metas completadas? Esta acción no se puede deshacer.',
+        () => {
+            completedGoals = [];
+            saveGoalsData();
+            renderGoals();
+            showToastMessage('📜 Historial limpiado');
+        }
+    );
 }
 
 // ===== MODAL DE EDICIÓN =====
