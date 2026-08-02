@@ -418,13 +418,18 @@
 
     function deleteStudyItem(id) {
         const study = studyPlanData.find(i => i.id === id);
-        if (confirm(`¿Eliminar "${study?.name}"?`)) {
-            studyPlanData = studyPlanData.filter(i => i.id !== id);
-            saveStudyData();
-            renderStudyPlanList();
-            showStudyMessage('🗑️ Estudio eliminado');
-            document.dispatchEvent(new CustomEvent('studyplanUpdated'));
-        }
+        if (!study) return;
+        
+        window.showConfirmModal(
+            `¿Estás seguro de eliminar "${study.name}"?`,
+            () => {
+                studyPlanData = studyPlanData.filter(i => i.id !== id);
+                saveStudyData();
+                renderStudyPlanList();
+                showStudyMessage('🗑️ Estudio eliminado');
+                document.dispatchEvent(new CustomEvent('studyplanUpdated'));
+            }
+        );
     }
 
     function updateStudyProgress(id) {

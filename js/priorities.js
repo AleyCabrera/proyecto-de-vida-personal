@@ -294,21 +294,19 @@ function savePriority() {
 
 function deletePriority(id) {
     const priority = prioritiesList.find(p => p.id === id);
-    if (confirm(`¿Eliminar la prioridad "${priority?.name}"?`)) {
-        prioritiesList = prioritiesList.filter(p => p.id !== id);
-        
-        // Guardar en localStorage
-        savePrioritiesToLocal();
-        
-        // Disparar evento
-        const event = new CustomEvent('prioritiesUpdated', { detail: { priorities: prioritiesList } });
-        document.dispatchEvent(event);
-        
-        // Actualizar UI
-        renderPrioritiesList();
-        renderPrioritiesChart();
-        showToastMessage('🗑️ Prioridad eliminada');
-    }
+    if (!priority) return;
+    
+    window.showConfirmModal(
+        `¿Estás seguro de eliminar la prioridad "${priority.name}"?`,
+        () => {
+            prioritiesList = prioritiesList.filter(p => p.id !== id);
+            savePrioritiesToLocal();
+            renderPrioritiesList();
+            renderPrioritiesChart();
+            showToastMessage('🗑️ Prioridad eliminada');
+            document.dispatchEvent(new CustomEvent('prioritiesUpdated'));
+        }
+    );
 }
 
 // Función principal de renderizado
