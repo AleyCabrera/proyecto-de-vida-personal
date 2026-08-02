@@ -615,17 +615,19 @@ function saveProject() {
 
 function deleteProject(id) {
     const project = projectsList.find(p => p.id === id);
-    if (confirm(`¿Eliminar el proyecto "${project?.name}"?`)) {
-        projectsList = projectsList.filter(p => p.id !== id);
-        saveProjectsToLocal();
-        
-        const event = new CustomEvent('projectsUpdated', { detail: { projects: projectsList } });
-        document.dispatchEvent(event);
-        
-        renderProjectsList();
-        updateProjectStats();
-        showProjectToast('🗑️ Proyecto eliminado');
-    }
+    if (!project) return;
+    
+    window.showConfirmModal(
+        `¿Estás seguro de eliminar el proyecto "${project.name}"?`,
+        () => {
+            projectsList = projectsList.filter(p => p.id !== id);
+            saveProjectsToLocal();
+            renderProjectsList();
+            updateProjectStats();
+            showProjectToast('🗑️ Proyecto eliminado');
+            document.dispatchEvent(new CustomEvent('projectsUpdated'));
+        }
+    );
 }
 
 function renderProjects() {
