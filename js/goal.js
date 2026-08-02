@@ -233,14 +233,6 @@ function restoreGoal(goalId) {
     showToastMessage('🔄 Meta restaurada a activas');
 }
 
-// function deleteGoal(goalId) {
-//     if (!confirm('¿Estás seguro de eliminar esta meta? Esta acción no se puede deshacer.')) return;
-    
-//     goalsList = goalsList.filter(g => g.id !== goalId);
-//     saveGoalsData();
-//     renderGoals();
-//     showToastMessage('🗑️ Meta eliminada');
-// }
 
 function deleteGoal(goalId) {
     const goal = goalsList.find(g => g.id === goalId);
@@ -257,19 +249,23 @@ function deleteGoal(goalId) {
     );
 }
 
-// function clearCompletedHistory() {
-//     if (completedGoals.length === 0) {
-//         showToastMessage('📜 No hay historial para limpiar');
-//         return;
-//     }
+function clearCompletedHistory() {
+    if (completedGoals.length === 0) {
+        showToastMessage('📜 No hay historial para limpiar');
+        return;
+    }
     
-//     if (!confirm('¿Eliminar todo el historial de metas completadas? Esta acción no se puede deshacer.')) return;
-    
-//     completedGoals = [];
-//     saveGoalsData();
-//     renderGoals();
-//     showToastMessage('📜 Historial limpiado');
-// }
+    window.showConfirmModal(
+        '¿Eliminar todo el historial de metas completadas? Esta acción no se puede deshacer.',
+        () => {
+            completedGoals = [];
+            saveGoalsData();
+            renderGoals();
+            showToastMessage('📜 Historial limpiado');
+        }
+    );
+}
+
 
 function clearCompletedHistory() {
     if (completedGoals.length === 0) {
