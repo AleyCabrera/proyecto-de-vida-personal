@@ -1,11 +1,11 @@
 // ============================================
-// MÓDULO DE PLAN DE ESTUDIO - VERSIÓN DEFINITIVA
+// MÓDULO DE PLAN DE ESTUDIO - VERSIÓN CORREGIDA
 // ============================================
 
 (function() {
     'use strict';
     
-    // Función para escapar HTML
+    // ===== FUNCIONES DE UTILIDAD (PRIVADAS) =====
     function escapeHtml(text) {
         if (!text) return '';
         const div = document.createElement('div');
@@ -13,7 +13,21 @@
         return div.innerHTML;
     }
 
-    // DATOS INICIALES (con prefijo único)
+    function generateId() {
+        return Date.now() + Math.floor(Math.random() * 1000);
+    }
+
+    function formatDateSpanish(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric' 
+        });
+    }
+
+    // ===== DATOS INICIALES (PRIVADOS) =====
     let studyPlanData = [
         {
             id: 1,
@@ -83,7 +97,7 @@
         }
     ];
 
-    // Variables únicas para este módulo
+    // ===== VARIABLES DE ESTADO (PRIVADAS) =====
     let studyEditingId = null;
     let studyFilterValue = 'all';
     let studySortField = 'date';
@@ -91,39 +105,49 @@
 
     const STUDY_STORAGE_KEY = 'aley_studyplan_data_v2';
 
-    // Persistencia
+    // ===== PERSISTENCIA (PRIVADA) =====
     function saveStudyData() {
-        localStorage.setItem(STUDY_STORAGE_KEY, JSON.stringify(studyPlanData));
-    }
-
-    function loadStudyData() {
-        const saved = localStorage.getItem(STUDY_STORAGE_KEY);
-        if (saved) {
-            studyPlanData = JSON.parse(saved);
+        try {
+            localStorage.setItem(STUDY_STORAGE_KEY, JSON.stringify(studyPlanData));
+        } catch (error) {
+            console.error('Error guardando datos del plan de estudio:', error);
+            showStudyMessage('❌ Error al guardar los datos');
         }
     }
 
-    // Toast
+    function loadStudyData() {
+        try {
+            const saved = localStorage.getItem(STUDY_STORAGE_KEY);
+            if (saved) {
+                studyPlanData = JSON.parse(saved);
+            }
+        } catch (error) {
+            console.error('Error cargando datos del plan de estudio:', error);
+        }
+    }
+
+    // ===== TOAST (PRIVADA) =====
     function showStudyMessage(msg) {
         if (typeof window.showToastMessageGlobal === 'function') {
             window.showToastMessageGlobal(msg);
         } else {
+            // Eliminar toasts existentes
+            document.querySelectorAll('.toast').forEach(t => t.remove());
+            
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = msg;
+            toast.textContent = msg;
             document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
         }
     }
 
-    // Formateo de fechas
-    function formatDateSpanish(dateString) {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-
-    // Badges
+    // ===== BADGES (PRIVADAS) =====
     function getLevelBadgeStyle(level) {
         const badgesMap = {
             'tecnico': '<span class="study-level-badge level-tecnico">🔧 Técnico</span>',
@@ -133,7 +157,7 @@
             'maestria': '<span class="study-level-badge level-maestria">🏆 Maestría</span>',
             'doctorado': '<span class="study-level-badge level-doctorado">🥇 Doctorado</span>'
         };
-        return badgesMap[level] || '<span class="study-level-badge">' + level + '</span>';
+        return badgesMap[level] || `<span class="study-level-badge">${level}</span>`;
     }
 
     function getStatusBadgeStyle(status) {
@@ -143,10 +167,10 @@
             'Completado': '<span class="study-status-badge status-completado">✅ Completado</span>',
             'Pausado': '<span class="study-status-badge status-pausado">⏸️ Pausado</span>'
         };
-        return badgesMap[status] || '<span class="study-status-badge">' + status + '</span>';
+        return badgesMap[status] || `<span class="study-status-badge">${status}</span>`;
     }
 
-    // Filtrado y ordenamiento
+    // ===== FILTRADO Y ORDENAMIENTO (PRIVADOS) =====
     function filterStudyItems() {
         let result = [...studyPlanData];
         if (studyFilterValue === 'progress') {
@@ -182,10 +206,14 @@
         return sorted;
     }
 
-    // Renderizado de filtros
+    // ===== RENDERIZADO DE FILTROS (PRIVADO) =====
     function renderStudyFilters() {
         const container = document.getElementById('studyplan-list');
         if (!container) return;
+        
+        // Eliminar filtros existentes para evitar duplicados
+        const existingBar = container.parentElement.querySelector('.certs-filter-bar');
+        if (existingBar) existingBar.remove();
         
         const filterBar = document.createElement('div');
         filterBar.className = 'certs-filter-bar';
@@ -213,10 +241,9 @@
             </div>
         `;
         
-        const existingBar = container.parentElement.querySelector('.certs-filter-bar');
-        if (existingBar) existingBar.remove();
         container.parentElement.insertBefore(filterBar, container);
         
+        // Eventos de filtros
         document.querySelectorAll('.filter-chip').forEach(btn => {
             btn.addEventListener('click', () => {
                 studyFilterValue = btn.dataset.filter;
@@ -224,6 +251,7 @@
             });
         });
         
+        // Eventos de ordenamiento
         document.querySelectorAll('.sort-chip').forEach(btn => {
             btn.addEventListener('click', () => {
                 studySortField = btn.dataset.sort;
@@ -231,6 +259,7 @@
             });
         });
         
+        // Evento de orden ascendente/descendente
         const toggleBtn = document.getElementById('studyToggleOrderBtn');
         if (toggleBtn) {
             toggleBtn.addEventListener('click', () => {
@@ -240,7 +269,7 @@
         }
     }
 
-    // Renderizado principal
+    // ===== RENDERIZADO PRINCIPAL (PRIVADO) =====
     function renderStudyPlanList() {
         const container = document.getElementById('studyplan-list');
         if (!container) return;
@@ -308,7 +337,7 @@
         updateStudyStats();
     }
 
-    // Estadísticas
+    // ===== ESTADÍSTICAS (PRIVADA) =====
     function updateStudyStats() {
         const total = studyPlanData.length;
         const completed = studyPlanData.filter(i => i.status === 'Completado').length;
@@ -329,29 +358,42 @@
         }
     }
 
-    // Funciones del MODAL
+    // ===== FUNCIONES DEL MODAL (PRIVADAS) =====
     function openAddStudyModal() {
         studyEditingId = null;
         const titleEl = document.getElementById('studyModalTitle');
         if (titleEl) titleEl.innerHTML = '<i class="fas fa-plus-circle"></i> Agregar Estudio';
         
         const fields = ['studyName', 'studyInstitution', 'studyDescription', 'studyStartDate', 'studyEndDate'];
-        fields.forEach(f => { const el = document.getElementById(f); if (el) el.value = ''; });
+        fields.forEach(f => { 
+            const el = document.getElementById(f); 
+            if (el) el.value = ''; 
+        });
         
         const levelSelect = document.getElementById('studyLevel');
         if (levelSelect) levelSelect.value = 'pregrado';
+        
         const statusSelect = document.getElementById('studyStatus');
         if (statusSelect) statusSelect.value = 'Planificado';
+        
         const progressInput = document.getElementById('studyProgress');
         if (progressInput) progressInput.value = '0';
         
         const modal = document.getElementById('studyModal');
-        if (modal) modal.classList.add('active');
+        if (modal) {
+            modal.classList.add('active');
+            // Resetear scroll
+            const modalBody = modal.querySelector('.modal-body');
+            if (modalBody) modalBody.scrollTop = 0;
+        }
     }
 
     function openEditStudyModal(id) {
         const study = studyPlanData.find(i => i.id === id);
-        if (!study) return;
+        if (!study) {
+            showStudyMessage('❌ Estudio no encontrado');
+            return;
+        }
         
         studyEditingId = id;
         const titleEl = document.getElementById('studyModalTitle');
@@ -359,23 +401,34 @@
         
         const nameInput = document.getElementById('studyName');
         if (nameInput) nameInput.value = study.name;
+        
         const institutionInput = document.getElementById('studyInstitution');
         if (institutionInput) institutionInput.value = study.institution;
+        
         const levelSelect = document.getElementById('studyLevel');
         if (levelSelect) levelSelect.value = study.level;
+        
         const descInput = document.getElementById('studyDescription');
         if (descInput) descInput.value = study.description || '';
+        
         const startDateInput = document.getElementById('studyStartDate');
         if (startDateInput) startDateInput.value = study.startDate || '';
+        
         const endDateInput = document.getElementById('studyEndDate');
         if (endDateInput) endDateInput.value = study.endDate || '';
+        
         const statusSelect = document.getElementById('studyStatus');
         if (statusSelect) statusSelect.value = study.status;
+        
         const progressInput = document.getElementById('studyProgress');
         if (progressInput) progressInput.value = study.progress;
         
         const modal = document.getElementById('studyModal');
-        if (modal) modal.classList.add('active');
+        if (modal) {
+            modal.classList.add('active');
+            const modalBody = modal.querySelector('.modal-body');
+            if (modalBody) modalBody.scrollTop = 0;
+        }
     }
 
     function closeStudyModal() {
@@ -394,47 +447,93 @@
         const status = document.getElementById('studyStatus')?.value;
         let progress = parseInt(document.getElementById('studyProgress')?.value) || 0;
         
-        if (!name) { showStudyMessage('⚠️ El nombre del estudio es requerido'); return; }
-        if (!institution) { showStudyMessage('⚠️ La institución es requerida'); return; }
+        if (!name) { 
+            showStudyMessage('⚠️ El nombre del estudio es requerido'); 
+            return; 
+        }
         
+        if (!institution) { 
+            showStudyMessage('⚠️ La institución es requerida'); 
+            return; 
+        }
+        
+        // Si el estado es Completado, forzar progreso a 100
         if (status === 'Completado') progress = 100;
         
         if (studyEditingId) {
             const index = studyPlanData.findIndex(i => i.id === studyEditingId);
             if (index !== -1) {
-                studyPlanData[index] = { ...studyPlanData[index], name, institution, level, description, startDate, endDate, status, progress };
+                studyPlanData[index] = { 
+                    ...studyPlanData[index], 
+                    name, 
+                    institution, 
+                    level, 
+                    description, 
+                    startDate, 
+                    endDate, 
+                    status, 
+                    progress 
+                };
                 showStudyMessage('✏️ Estudio actualizado');
             }
         } else {
-            studyPlanData.push({ id: Date.now(), name, institution, level, description, startDate, endDate, status, progress });
+            studyPlanData.push({ 
+                id: generateId(), 
+                name, 
+                institution, 
+                level, 
+                description, 
+                startDate, 
+                endDate, 
+                status, 
+                progress 
+            });
             showStudyMessage('✅ Estudio agregado');
         }
         
         saveStudyData();
         renderStudyPlanList();
         closeStudyModal();
-        document.dispatchEvent(new CustomEvent('studyplanUpdated'));
+        
+        const event = new CustomEvent('studyplanUpdated');
+        document.dispatchEvent(event);
     }
 
+    // ===== ELIMINAR ESTUDIO (CON MODAL PERSONALIZADO) =====
     function deleteStudyItem(id) {
         const study = studyPlanData.find(i => i.id === id);
         if (!study) return;
         
-        window.showConfirmModal(
-            `¿Estás seguro de eliminar "${study.name}"?`,
-            () => {
+        if (typeof window.showConfirmModal === 'function') {
+            window.showConfirmModal(
+                `¿Estás seguro de eliminar "${study.name}"?`,
+                () => {
+                    studyPlanData = studyPlanData.filter(i => i.id !== id);
+                    saveStudyData();
+                    renderStudyPlanList();
+                    showStudyMessage('🗑️ Estudio eliminado');
+                    
+                    const event = new CustomEvent('studyplanUpdated');
+                    document.dispatchEvent(event);
+                }
+            );
+        } else {
+            // Fallback solo si el modal de confirmación no existe
+            if (confirm(`¿Eliminar "${study.name}"?`)) {
                 studyPlanData = studyPlanData.filter(i => i.id !== id);
                 saveStudyData();
                 renderStudyPlanList();
                 showStudyMessage('🗑️ Estudio eliminado');
                 document.dispatchEvent(new CustomEvent('studyplanUpdated'));
             }
-        );
+        }
     }
 
+    // ===== ACTUALIZAR PROGRESO =====
     function updateStudyProgress(id) {
         const study = studyPlanData.find(i => i.id === id);
         if (!study) return;
+        
         const newProgress = prompt(`Progreso actual: ${study.progress}%`, study.progress);
         if (newProgress !== null) {
             const progress = parseInt(newProgress);
@@ -442,15 +541,28 @@
                 study.progress = progress;
                 if (study.progress >= 100) study.status = 'Completado';
                 else if (study.progress > 0 && study.status === 'Planificado') study.status = 'En curso';
+                
                 saveStudyData();
                 renderStudyPlanList();
                 showStudyMessage(`📊 Progreso: ${study.progress}%`);
-                document.dispatchEvent(new CustomEvent('studyplanUpdated'));
+                
+                const event = new CustomEvent('studyplanUpdated');
+                document.dispatchEvent(event);
             }
         }
     }
 
-    // Inicialización
+    // ===== FUNCIÓN PÚBLICA PARA RENDERIZAR DESDE MAIN.JS =====
+    function renderStudyPlanModule() {
+        renderStudyPlanList();
+    }
+
+    // ===== OBTENER DATOS (PARA MAIN.JS) =====
+    function getStudyPlanData() {
+        return studyPlanData;
+    }
+
+    // ===== INICIALIZACIÓN (PRIVADA) =====
     function initStudyPlan() {
         console.log('🚀 Inicializando Plan de Estudio...');
         loadStudyData();
@@ -468,21 +580,25 @@
         
         const modal = document.getElementById('studyModal');
         if (modal) {
-            modal.addEventListener('click', (e) => { if (e.target === modal) closeStudyModal(); });
+            modal.addEventListener('click', (e) => { 
+                if (e.target === modal) closeStudyModal(); 
+            });
         }
         
-        console.log('✅ Plan de Estudio inicializado');
+        console.log('✅ Plan de Estudio inicializado correctamente');
     }
 
-    // Exportar funciones al objeto global window
+    // ===== EXPORTAR FUNCIONES GLOBALES (SOLO LAS NECESARIAS) =====
     window.openAddStudyModal = openAddStudyModal;
     window.editStudyItem = openEditStudyModal;
     window.closeStudyModal = closeStudyModal;
     window.saveStudyItem = saveStudyItem;
     window.deleteStudyItem = deleteStudyItem;
     window.updateStudyProgress = updateStudyProgress;
+    window.renderStudyPlanModule = renderStudyPlanModule;
+    window.getStudyPlanData = getStudyPlanData;
 
-    // Iniciar módulo
+    // ===== INICIALIZACIÓN =====
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initStudyPlan);
     } else {

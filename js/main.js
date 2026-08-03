@@ -1,6 +1,5 @@
 // ============================================
-// MAIN.JS - SISTEMA PRINCIPAL DEPURADO
-// (Sin CV - ahora es módulo independiente)
+// MAIN.JS - SISTEMA PRINCIPAL CORREGIDO
 // ============================================
 
 // Función global para mostrar toast
@@ -23,12 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (container && thumbnail && playBtn) {
         function loadVideo() {
             if (container.querySelector('iframe')) {
-                // Si ya existe, alternar reproducción
                 togglePlay();
                 return;
             }
             
-            // Crear iframe con controles visibles
             iframe = document.createElement('iframe');
             iframe.setAttribute('src', 'https://www.youtube.com/embed/aJvOPtYUj1o?autoplay=1&rel=0&modestbranding=1&controls=1&showinfo=0');
             iframe.setAttribute('title', 'Jordi Sierra i Fabra - Leer me salvó la vida');
@@ -42,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
             iframe.style.left = '0';
             iframe.style.zIndex = '5';
             
-            // Ocultar thumbnail y botón
             thumbnail.style.transition = 'opacity 0.3s ease';
             playBtn.style.transition = 'opacity 0.3s ease';
             thumbnail.style.opacity = '0';
@@ -57,27 +53,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         function togglePlay() {
-            // YouTube no permite control directo desde JavaScript sin API
-            // Pero podemos recargar el iframe o mostrar controles
             if (iframe) {
-                // Recargar con autoplay alternado
                 const currentSrc = iframe.getAttribute('src');
                 if (isPlaying) {
-                    // Pausar: recargar sin autoplay
                     iframe.setAttribute('src', currentSrc.replace('autoplay=1', 'autoplay=0'));
                     isPlaying = false;
                 } else {
-                    // Reproducir: recargar con autoplay
                     iframe.setAttribute('src', currentSrc.replace('autoplay=0', 'autoplay=1'));
                     isPlaying = true;
                 }
             }
         }
         
-        // Click en el contenedor
         container.addEventListener('click', loadVideo);
-        
-        // Click en el botón de play
         playBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             loadVideo();
@@ -253,10 +241,11 @@ function updateDateTimeDisplay() {
     }
 }
 
-// Home stats
+// ===== HOME STATS =====
 function updateLandingStats() {
     const projectsEl = document.getElementById("landing-projects");
     const certsEl = document.getElementById("landing-certs");
+    const goalsEl = document.getElementById("landing-goals");
     
     if (typeof window.getProjectsList !== 'undefined') {
         if (projectsEl) projectsEl.innerText = window.getProjectsList().length;
@@ -264,6 +253,11 @@ function updateLandingStats() {
     
     if (typeof window.getCertificationsList !== 'undefined') {
         if (certsEl) certsEl.innerText = window.getCertificationsList().length;
+    }
+    
+    // Actualizar metas desde goal.js
+    if (typeof window.getGoalsCount === 'function') {
+        if (goalsEl) goalsEl.innerText = window.getGoalsCount();
     }
 }
 
@@ -307,29 +301,64 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     });
 });
 
-// ===== BOTONES DEL HORARIO =====
+// ===== BOTONES DEL HORARIO (CORREGIDOS CON showConfirmModal) =====
 const saveScheduleBtn = document.getElementById("save-schedule-btn");
 const clearScheduleBtn = document.getElementById("clear-schedule-btn");
 const resetScheduleBtn = document.getElementById("reset-schedule-btn");
 
-if (saveScheduleBtn) saveScheduleBtn.addEventListener("click", () => { saveScheduleToLocal(); window.showToastMessageGlobal("✅ Horario guardado"); });
+if (saveScheduleBtn) {
+    saveScheduleBtn.addEventListener("click", () => { 
+        saveScheduleToLocal(); 
+        window.showToastMessageGlobal("✅ Horario guardado"); 
+    });
+}
+
 if (clearScheduleBtn) {
     clearScheduleBtn.addEventListener("click", () => {
-        if (confirm("¿Eliminar todas las actividades?")) {
-            for (let h of hours) scheduleMatrix[h] = Array(7).fill("");
-            renderScheduleTable();
-            saveScheduleToLocal();
-            window.showToastMessageGlobal("Horario limpiado");
+        // ✅ Reemplazar confirm() por showConfirmModal()
+        if (typeof window.showConfirmModal === 'function') {
+            window.showConfirmModal(
+                "¿Eliminar todas las actividades del horario? Esta acción no se puede deshacer.",
+                () => {
+                    for (let h of hours) scheduleMatrix[h] = Array(7).fill("");
+                    renderScheduleTable();
+                    saveScheduleToLocal();
+                    window.showToastMessageGlobal("🗑️ Horario limpiado");
+                }
+            );
+        } else {
+            // Fallback: solo si showConfirmModal no existe
+            if (confirm("¿Eliminar todas las actividades?")) {
+                for (let h of hours) scheduleMatrix[h] = Array(7).fill("");
+                renderScheduleTable();
+                saveScheduleToLocal();
+                window.showToastMessageGlobal("Horario limpiado");
+            }
         }
     });
 }
+
 if (resetScheduleBtn) {
     resetScheduleBtn.addEventListener("click", () => {
-        if (confirm("Restaurar horario por defecto?")) {
-            initDefaultSchedule();
-            renderScheduleTable();
-            saveScheduleToLocal();
-            window.showToastMessageGlobal("Horario restaurado");
+        // ✅ Reemplazar confirm() por showConfirmModal()
+        if (typeof window.showConfirmModal === 'function') {
+            window.showConfirmModal(
+                "¿Restaurar el horario por defecto? Perderás todos los cambios actuales.",
+                () => {
+                    initDefaultSchedule();
+                    renderScheduleTable();
+                    saveScheduleToLocal();
+                    window.showToastMessageGlobal("🔄 Horario restaurado a valores predeterminados");
+                }
+            );
+        } else {
+            // Fallback: solo si showConfirmModal no existe
+            if (confirm("Restaurar horario por defecto?")) {
+                initDefaultSchedule();
+                renderScheduleTable();
+                saveScheduleToLocal();
+                window.showToastMessageGlobal("Horario restaurado");
+            }
         }
     });
 }
@@ -360,8 +389,8 @@ window.selectedType = "personal";
 document.addEventListener('prioritiesUpdated', () => { updateLandingStats(); });
 document.addEventListener('projectsUpdated', () => { updateLandingStats(); });
 document.addEventListener('certificationsUpdated', () => { updateLandingStats(); });
-document.addEventListener('studyplanUpdated', () => { console.log('Plan de estudio actualizado'); });
-document.addEventListener('cvUpdated', () => { console.log('CV actualizado'); });
+document.addEventListener('studyplanUpdated', () => { console.log('📢 Plan de estudio actualizado'); });
+document.addEventListener('cvUpdated', () => { console.log('📢 CV actualizado'); });
 
 // ===== INICIALIZACIÓN =====
 loadScheduleFromLocal();
@@ -369,4 +398,11 @@ renderScheduleTable();
 updateDateTimeDisplay();
 updateLandingStats();
 renderGoalsTimeline();
-setInterval(() => { updateDateTimeDisplay(); renderScheduleTable(); }, 10000);
+
+// Actualizar cada 10 segundos
+setInterval(() => { 
+    updateDateTimeDisplay(); 
+    renderScheduleTable(); 
+}, 10000);
+
+console.log('✅ Main.js inicializado correctamente');
