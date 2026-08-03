@@ -112,7 +112,7 @@
     padding: 20px;
     transition: all 0.3s;
     border: 1px solid rgba(220, 38, 38, 0.2);
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .timeline-item:hover {

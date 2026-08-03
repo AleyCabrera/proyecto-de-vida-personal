@@ -1,10 +1,9 @@
 // ============================================
-// MÓDULO DE GESTIÓN DE CERTIFICACIONES - VERSIÓN MEJORADA
+// MÓDULO DE GESTIÓN DE CERTIFICACIONES - VERSIÓN CON IIFE
 // ============================================
 
-// Evitar conflictos con main.js
-if (typeof window.certificationsModuleLoaded === 'undefined') {
-    window.certificationsModuleLoaded = true;
+(function() {
+    'use strict';
     
     // ===== FUNCIONES DE UTILIDAD =====
     function escapeHtml(text) {
@@ -28,7 +27,7 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         return Date.now() + Math.floor(Math.random() * 1000);
     }
 
-    // ===== DATOS INICIALES =====
+    // ===== DATOS INICIALES (AHORA SON PRIVADOS) =====
     let certificationsList = [
         {
             id: 1,
@@ -58,6 +57,7 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         }
     ];
 
+    // Variables privadas del módulo
     let currentEditCertId = null;
     let progressEditingId = null;
 
@@ -84,7 +84,7 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         }
     }
 
-    // ===== TOAST =====
+    // ===== TOAST (usa la función global si existe) =====
     function showToast(msg) {
         if (typeof window.showToastMessageGlobal === 'function') {
             window.showToastMessageGlobal(msg);
@@ -243,7 +243,6 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         const modal = document.getElementById('certModal');
         if (modal) {
             modal.classList.add('active');
-            // Resetear scroll
             const modalBody = modal.querySelector('.modal-body');
             if (modalBody) modalBody.scrollTop = 0;
         }
@@ -326,7 +325,6 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
             return; 
         }
         
-        // Si el estado es Completado, forzar progreso a 100
         if (status === 'Completado') progress = 100;
         
         if (currentEditCertId) {
@@ -377,22 +375,10 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         const cert = certificationsList.find(c => c.id === id);
         if (!cert) return;
         
-        if (typeof window.showConfirmModal === 'function') {
-            window.showConfirmModal(
-                `¿Estás seguro de eliminar la certificación "${cert.name}"?`,
-                () => {
-                    certificationsList = certificationsList.filter(c => c.id !== id);
-                    saveCertificationsToLocal();
-                    renderCertifications();
-                    showToast('🗑️ Certificación eliminada');
-                    
-                    const event = new CustomEvent('certificationsUpdated');
-                    document.dispatchEvent(event);
-                }
-            );
-        } else {
-            // Fallback si el modal de confirmación no está disponible
-            if (confirm(`¿Eliminar la certificación "${cert.name}"?`)) {
+        // Usar showConfirmModal (ya no hay fallback)
+        window.showConfirmModal(
+            `¿Estás seguro de eliminar la certificación "${cert.name}"?`,
+            () => {
                 certificationsList = certificationsList.filter(c => c.id !== id);
                 saveCertificationsToLocal();
                 renderCertifications();
@@ -401,7 +387,7 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
                 const event = new CustomEvent('certificationsUpdated');
                 document.dispatchEvent(event);
             }
-        }
+        );
     }
 
     // ===== FUNCIONES DEL MODAL DE PROGRESO =====
@@ -414,23 +400,19 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         
         progressEditingId = id;
         
-        // Actualizar información en el modal
         const nameEl = document.getElementById('progressCertName');
         const currentEl = document.getElementById('progressCurrentValue');
         if (nameEl) nameEl.textContent = cert.name;
         if (currentEl) currentEl.textContent = cert.progress;
         
-        // Configurar slider
         const slider = document.getElementById('progressSlider');
         const display = document.getElementById('progressSliderValue');
         if (slider) slider.value = cert.progress;
         if (display) display.textContent = cert.progress;
         
-        // Limpiar comentario
         const commentEl = document.getElementById('progressComment');
         if (commentEl) commentEl.value = '';
         
-        // Mostrar modal
         const modal = document.getElementById('progressModal');
         if (modal) {
             modal.classList.add('active');
@@ -457,15 +439,12 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         
         const slider = document.getElementById('progressSlider');
         const newProgress = slider ? parseInt(slider.value) : 0;
-        const comment = document.getElementById('progressComment')?.value.trim() || '';
         
-        // Validar progreso
         if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
             showToast('⚠️ El progreso debe estar entre 0 y 100');
             return;
         }
         
-        // Actualizar progreso
         cert.progress = newProgress;
         
         if (cert.progress >= 100) {
@@ -475,12 +454,10 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
             cert.status = 'En curso';
         }
         
-        // Guardar cambios
         saveCertificationsToLocal();
         renderCertifications();
         closeProgressModal();
         
-        // Notificar actualización
         const event = new CustomEvent('certificationsUpdated');
         document.dispatchEvent(event);
         
@@ -489,12 +466,11 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
 
     // ===== FUNCIÓN UPDATE PROGRESS (PUNTO DE ENTRADA) =====
     function updateProgress(id) {
-        // Verificar que el modal de progreso exista
         const modal = document.getElementById('progressModal');
         if (modal) {
             openProgressModal(id);
         } else {
-            // Fallback: usar prompt si el modal no existe
+            // Si el modal no existe, usar prompt como fallback
             const cert = certificationsList.find(c => c.id === id);
             if (!cert) return;
             
@@ -528,7 +504,6 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
             });
         }
         
-        // Botones rápidos
         document.querySelectorAll('.quick-progress-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const value = parseInt(btn.dataset.value);
@@ -539,13 +514,11 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
             });
         });
         
-        // Botón guardar
         const saveBtn = document.getElementById('saveProgressBtn');
         if (saveBtn) {
             saveBtn.addEventListener('click', saveProgressUpdate);
         }
         
-        // Cerrar modal al hacer clic fuera
         const modal = document.getElementById('progressModal');
         if (modal) {
             modal.addEventListener('click', (e) => {
@@ -559,19 +532,16 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
         loadCertificationsFromLocal();
         renderCertifications();
         
-        // Botón agregar certificación
         const addBtn = document.getElementById('add-cert-btn');
         if (addBtn) {
             addBtn.addEventListener('click', openAddCertModal);
         }
         
-        // Botón guardar del modal de certificación
         const saveBtn = document.getElementById('saveCertBtn');
         if (saveBtn) {
             saveBtn.addEventListener('click', saveCertification);
         }
         
-        // Cerrar modal de certificación al hacer clic fuera
         const modal = document.getElementById('certModal');
         if (modal) {
             modal.addEventListener('click', (e) => {
@@ -579,13 +549,13 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
             });
         }
         
-        // Inicializar modal de progreso
         initProgressModal();
         
         console.log('✅ Módulo de certificaciones inicializado correctamente');
     }
 
     // ===== EXPORTAR FUNCIONES GLOBALES =====
+    // Solo las funciones que necesitan ser llamadas desde HTML
     window.openAddCertModal = openAddCertModal;
     window.openEditCertModal = openEditCertModal;
     window.closeCertModal = closeCertModal;
@@ -601,4 +571,5 @@ if (typeof window.certificationsModuleLoaded === 'undefined') {
     } else {
         initCertificationsModule();
     }
-}
+
+})(); // <- Fin de la IIFE
