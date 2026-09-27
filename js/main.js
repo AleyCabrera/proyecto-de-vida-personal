@@ -261,18 +261,6 @@ function updateLandingStats() {
     }
 }
 
-function renderGoalsTimeline() {
-    const container = document.getElementById("goals-timeline");
-    if (container) {
-        container.innerHTML = `
-            <div class="tracking-item">🎯 2025: Tecnólogo Software + CCNA</div>
-            <div class="tracking-item">🎯 2026-2027: Ingeniería Mecatrónica + Especializaciones</div>
-            <div class="tracking-item">🎯 2028-2030: Magíster en Ciberseguridad</div>
-            <div class="tracking-item">🎯 2032: Doctorado y CISO</div>
-        `;
-    }
-}
-
 // Función auxiliar escapeHtml (para uso interno)
 function escapeHtml(text) {
     if (!text) return '';
@@ -297,7 +285,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
         if (btn.dataset.page === "certifications" && typeof window.renderCertifications !== 'undefined') window.renderCertifications();
         if (btn.dataset.page === "studyplan" && typeof window.renderStudyPlanModule !== 'undefined') window.renderStudyPlanModule();
         if (btn.dataset.page === "cv" && typeof window.renderCV !== 'undefined') window.renderCV();
-        if (btn.dataset.page === "home") { updateLandingStats(); renderGoalsTimeline(); }
+        if (btn.dataset.page === "home") { updateLandingStats(); }
     });
 });
 
@@ -397,7 +385,6 @@ loadScheduleFromLocal();
 renderScheduleTable();
 updateDateTimeDisplay();
 updateLandingStats();
-renderGoalsTimeline();
 
 // Actualizar cada 10 segundos
 setInterval(() => { 

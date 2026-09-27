@@ -302,6 +302,7 @@
     window.saveCVItem = saveCVItem;
     window.getSkillsList = getSkillsList;
     window.getToolsList = getToolsList;
+    window.renderCV = renderCV;
 
     // Inicializar
     if (document.readyState === 'loading') {
