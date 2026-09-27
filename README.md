@@ -18,19 +18,28 @@ Diseñada para ayudarte a planificar, organizar y visualizar tus metas, proyecto
 
 ## 📋 Tabla de Contenidos
 
-- [✨ Características](#-características)
-- [🖥️ Capturas de Pantalla](#️-capturas-de-pantalla)
-- [🛠️ Tecnologías](#️-tecnologías)
-- [📂 Estructura del Proyecto](#-estructura-del-proyecto)
-- [🚀 Instalación y Ejecución](#-instalación-y-ejecución)
-- [📦 Módulos Principales](#-módulos-principales)
-- [💾 Persistencia de Datos](#-persistencia-de-datos)
-- [🎨 Personalización](#-personalización)
-- [🤝 Contribución](#-contribución)
-- [⚠️ Notas Adicionales](#️-notas-adicionales)
-- [📄 Licencia](#-licencia)
-- [📧 Contacto](#-contacto)
-- [🙏 Agradecimientos](#-agradecimientos)
+- [🚀 Proyecto de Vida Personal](#-proyecto-de-vida-personal)
+  - [📋 Tabla de Contenidos](#-tabla-de-contenidos)
+  - [✨ Características](#-características)
+  - [🖥️ Capturas de Pantalla](#️-capturas-de-pantalla)
+  - [🛠️ Tecnologías](#️-tecnologías)
+  - [📂 Estructura del Proyecto](#-estructura-del-proyecto)
+  - [🚀 Instalación y Ejecución](#-instalación-y-ejecución)
+    - [Requisitos Previos](#requisitos-previos)
+    - [Pasos para Ejecutar](#pasos-para-ejecutar)
+    - [📌 Notas de Ejecución](#-notas-de-ejecución)
+  - [📦 Módulos Principales](#-módulos-principales)
+  - [💾 Persistencia de Datos](#-persistencia-de-datos)
+  - [🎨 Personalización](#-personalización)
+    - [Cambiar Colores y Tema](#cambiar-colores-y-tema)
+    - [Añadir Nuevos Módulos](#añadir-nuevos-módulos)
+    - [Modificar Datos Iniciales](#modificar-datos-iniciales)
+  - [🤝 Contribución](#-contribución)
+    - [Directrices de Contribución](#directrices-de-contribución)
+  - [⚠️ Notas Adicionales](#️-notas-adicionales)
+  - [📄 Licencia](#-licencia)
+  - [📧 Contacto](#-contacto)
+  - [🙏 Agradecimientos](#-agradecimientos)
 
 ---
 
@@ -319,10 +328,10 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para má
 
 | | |
 |---|---|
-| **Autor** | Alejandro |
-| **Email** | alejandro@example.com |
-| **GitHub** | [@tu-usuario](https://github.com/tu-usuario) |
-| **LinkedIn** | [Tu Perfil](#) |
+| **Autor** | Aley Cabrera D. |
+| **Email** | aley.cabrera@gmail.com |
+| **GitHub** | [@AleyCabreraD](https://github.com/AleyCabrera) |
+| **LinkedIn** | [Aley Cabrera D](https://www.linkedin.com/in/aley-cabrera/) |
 
 ---
 

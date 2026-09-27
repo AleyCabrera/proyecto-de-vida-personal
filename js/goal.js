@@ -423,7 +423,8 @@ const globalFunctions = {
     restoreGoal,
     openEditGoalModal,
     closeEditModal,
-    saveEditedGoal
+    saveEditedGoal,
+    getGoalsCount
 };
 
 // Limpiar funciones globales existentes
@@ -440,6 +441,11 @@ Object.assign(window, globalFunctions);
 // Asegurar que showToastMessage esté disponible globalmente
 if (typeof window.showToastMessage === 'undefined') {
     window.showToastMessage = showToastMessage;
+}
+
+// ===== FUNCIÓN PÚBLICA PARA LA HOME =====
+function getGoalsCount() {
+    return goalsList.length;
 }
 
 // Cargar datos y renderizar

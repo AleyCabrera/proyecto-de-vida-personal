@@ -37,9 +37,12 @@
 
 /* Grid de dos columnas */
 .priorities-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 24px;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px; */
 }
 
 @media (max-width: 768px) {
@@ -57,7 +60,7 @@
 }
 
 .priorities-chart {
-    max-height: 280px;
+    max-height: 460px;
     width: 100%;
 }
 

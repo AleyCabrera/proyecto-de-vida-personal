@@ -224,24 +224,32 @@
 
     // Eliminar item
     function deleteCVItem(type, index) {
-        let itemName = '';
+    let itemName = '';
+    let action = '';
+    
         if (type === 'skill') {
             itemName = skillsList[index];
-            if (confirm(`¿Eliminar la habilidad "${itemName}"?`)) {
-                skillsList.splice(index, 1);
-                showCVToast('🗑️ Habilidad eliminada');
-            }
+            action = 'habilidad';
         } else {
             itemName = toolsList[index];
-            if (confirm(`¿Eliminar la herramienta "${itemName}"?`)) {
-                toolsList.splice(index, 1);
-                showCVToast('🗑️ Herramienta eliminada');
-            }
+            action = 'herramienta';
         }
         
-        saveCVData();
-        renderCV();
-        document.dispatchEvent(new CustomEvent('cvUpdated'));
+        window.showConfirmModal(
+            `¿Estás seguro de eliminar la ${action} "${itemName}"?`,
+            () => {
+                if (type === 'skill') {
+                    skillsList.splice(index, 1);
+                    showCVToast('🗑️ Habilidad eliminada');
+                } else {
+                    toolsList.splice(index, 1);
+                    showCVToast('🗑️ Herramienta eliminada');
+                }
+                saveCVData();
+                renderCV();
+                document.dispatchEvent(new CustomEvent('cvUpdated'));
+            }
+        );
     }
 
     // Obtener datos (para main.js)
