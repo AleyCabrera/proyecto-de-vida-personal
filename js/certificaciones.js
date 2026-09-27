@@ -527,6 +527,11 @@
         }
     }
 
+    // ===== FUNCIÓN PÚBLICA PARA LA HOME =====
+    function getCertificationsList() {
+        return certificationsList;
+    }
+
     // ===== INICIALIZACIÓN PRINCIPAL =====
     function initCertificationsModule() {
         loadCertificationsFromLocal();
@@ -564,6 +569,7 @@
     window.updateProgress = updateProgress;
     window.renderCertifications = renderCertifications;
     window.closeProgressModal = closeProgressModal;
+    window.getCertificationsList = getCertificationsList;
 
     // ===== INICIAR =====
     if (document.readyState === 'loading') {
